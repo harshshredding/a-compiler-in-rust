@@ -1,4 +1,4 @@
-use regex::Regex;
+use regex::{Captures, Regex};
 use std::fs;
 
 // paranthesis: [, ], {, }, (, )
@@ -85,39 +85,56 @@ impl Scanner {
     }
 }
 
-fn get_identifier(source_code_string: String) -> Option<String> {
-    // Add new line char to source code
-    let source_code_string = source_code_string.clone() + "\n";
-
-    let identifier_regex = Regex::new(r"^([A-Za-z]\w*)[^\w]").unwrap();
-
-    let identifier_capture = identifier_regex.captures(&source_code_string);
-
-    match identifier_capture {
-        Some(captures) => {
-            let identifier_string = captures.get(1).unwrap().as_str();
-            assert!(!identifier_string.is_empty());
-            return Some(identifier_string.into());
-        },
-        None => return None
-    }
+pub fn get_identifier(source_code_string: String) -> Option<String> {
+    let regex_string = r"^([A-Za-z]\w*)\W";
+    return get_token_using_regex(regex_string.into(), source_code_string)
 }
 
-fn get_integer(source_code_string: String) -> Option<String> {
-    // Add new line char to source code
+pub fn get_integer(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(([1-9]\d*)|0)\W";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+pub fn get_float(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(((([1-9]\d*)|0)\.((\d+[1-9])|0))(e[+-](([1-9]\d*)|0))?)\W";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+pub fn get_operator(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(==|<>|<=|>=|\+|-|\*|/|=|and|or|not)";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+pub fn get_punctuation(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(::|=>|\(|\)|\{|\}|\[|\]|;|,|\.|:)";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+pub fn get_reserved_keyword(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(integer|float|void|class|self|isa|while|if|then|else|read|write|return|localvar|constructor|attribute|function|public|private)[^a-z]";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+pub fn get_whitespace(source_code_string: String) -> Option<String> {
+    let regex_string = r"^(\s+)(\S|$)";
+    return get_token_using_regex(regex_string.into(), source_code_string)
+}
+
+fn get_token_using_regex(regex: String, source_code_string: String) -> Option<String> {
     let source_code_string = source_code_string.clone() + "\n";
+    let compiled_regex_obj = Regex::new(&regex).unwrap();
+    let captures = compiled_regex_obj.captures(&source_code_string);
+    return get_string_from_captures(captures);
+}
 
-    let digit_regex = Regex::new(r"^(\d+)[^\w]").unwrap();
-
-    let identifier_capture = digit_regex.captures(&source_code_string);
-
-    match identifier_capture {
+fn get_string_from_captures(captures_option: Option<Captures>) -> Option<String> {
+    match captures_option {
         Some(captures) => {
-            let integer_string = captures.get(1).unwrap().as_str();
-            assert!(!integer_string.is_empty());
-            return Some(integer_string.into());
-        },
-        None => return None
+            let token_string = captures.get(1).unwrap().as_str();
+            assert!(!token_string.is_empty());
+            return Some(token_string.into());
+        }
+        None => return None,
     }
 }
 
@@ -232,84 +249,16 @@ fn test_regular_expressions_to_find_first_identifier() {
 
     let identifier_regex = Regex::new(r"^([A-Za-z]\w*)[^\w]").unwrap();
 
-    assert!(identifier_regex.captures(string_doesnt_start_with_id.as_str()).is_none());
+    assert!(identifier_regex
+        .captures(string_doesnt_start_with_id.as_str())
+        .is_none());
 
-    let identifier_capture = identifier_regex.captures(&string_starts_with_id)
-                                                            .expect("should be able to capture identifier");
+    let identifier_capture = identifier_regex
+        .captures(&string_starts_with_id)
+        .expect("should be able to capture identifier");
     let whole_capture = identifier_capture.get(0).unwrap().as_str();
     assert_eq!(whole_capture, "var1+");
 
     // let whole_capture = captures.get(0).map_or("", |m| m.as_str());
     // assert_eq!(whole_capture, "");
 }
-
-#[test]
-fn test_get_identifier() {
-    let id = get_identifier(String::from("x+y+z"));
-    assert!(id.is_some());
-    assert_eq!(String::from("x"), id.unwrap());
-
-
-    let id = get_identifier(String::from("some_id = another_token"));
-    assert!(id.is_some());
-    assert_eq!(String::from("some_id"), id.unwrap());
-
-
-    let id = get_identifier(String::from("some_id_123_-another_token"));
-    assert!(id.is_some());
-    assert_eq!(String::from("some_id_123_"), id.unwrap());
-
-
-    let id = get_identifier(String::from("+some_token"));
-    assert!(id.is_none());
-
-    let id = get_identifier(String::from("123+some_token"));
-    assert!(id.is_none());
-
-    
-    let id = get_identifier(String::from("some_id"));
-    assert!(id.is_some());
-    assert_eq!(String::from("some_id"), id.unwrap());
-
-    
-    let id = get_identifier(String::from("1abc+some_token"));
-    assert!(id.is_none());
-
-}
-
-#[test]
-fn test_get_integer() {
-    let id = get_integer(String::from("x+y+z"));
-    assert!(id.is_none());
-
-
-    let id = get_integer(String::from("some_id = another_token"));
-    assert!(id.is_none());
-
-
-    let id = get_integer(String::from("some_id_123_-another_token"));
-    assert!(id.is_none());
-
-
-    let id = get_integer(String::from("+some_token"));
-    assert!(id.is_none());
-
-    let id = get_integer(String::from("123+some_token"));
-    assert!(id.is_some());
-    assert_eq!(String::from("123"), id.unwrap());
-
-    let id = get_integer(String::from("123 some_token"));
-    assert!(id.is_some());
-    assert_eq!(String::from("123"), id.unwrap());
-
-    
-    let id = get_integer(String::from("123abc"));
-    assert!(id.is_none());
-
-    
-    let id = get_integer(String::from("1abc+some_token"));
-    assert!(id.is_none());
-
-}
-
-
