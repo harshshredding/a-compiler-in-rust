@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 mod lexical_analysis;
 mod synthesis;
 mod tests_lexical_analysis;
