@@ -112,8 +112,8 @@ pub struct Token {
 }
 
 pub struct Scanner {
-    source_text: String,
-    current_location: usize,
+    pub source_text: String,
+    pub current_location: usize,
 }
 
 impl Token {
@@ -133,11 +133,11 @@ impl Scanner {
         };
     }
 
-    fn source_size(&self) -> usize {
+    pub fn source_size(&self) -> usize {
         return self.source_text.len();
     }
 
-    fn next_token(&mut self) -> Option<Token> {
+    pub fn next_token(&mut self) -> Option<Token> {
         if self.current_location > self.source_size() {
             panic!(
                 "current location {} is greater than source len {}",
@@ -199,10 +199,10 @@ impl Scanner {
 }
 
 fn get_token_if_valid(lexeme_string: Option<String>, token_type: TokenType) -> Option<Token> {
-    if lexeme_string.is_some() {
-        return Some(Token { token_type: token_type, lexeme: lexeme_string.unwrap() });
+    return if lexeme_string.is_some() {
+        Some(Token { token_type: token_type, lexeme: lexeme_string.unwrap() })
     } else {
-        return None;
+        None
     }
 }
 
@@ -338,146 +338,35 @@ pub fn get_whitespaces_string(source_code_string: String) -> Option<String> {
     return get_token_using_regex(regex_string.into(), source_code_string);
 }
 
-fn get_token_using_regex(regex: String, source_code_string: String) -> Option<String> {
+pub fn get_token_using_regex(regex: String, source_code_string: String) -> Option<String> {
     let compiled_regex_obj = Regex::new(&regex).unwrap();
     let captures = compiled_regex_obj.captures(&source_code_string);
     return get_string_from_captures(captures);
 }
 
-fn get_string_from_captures(captures_option: Option<Captures>) -> Option<String> {
-    match captures_option {
+pub fn get_string_from_captures(captures_option: Option<Captures>) -> Option<String> {
+    return match captures_option {
         Some(captures) => {
             let token_string = captures.get(1).unwrap().as_str();
             assert!(!token_string.is_empty());
-            return Some(token_string.into());
+            Some(token_string.into())
         }
-        None => return None,
+        None => None,
     }
 }
 
-fn read_source_test_file() -> String {
+pub fn read_source_test_file() -> String {
     let file_path = "src/test_resources/test_code.txt".to_string();
     let file_content = fs::read_to_string(file_path).expect("Could not read contents of file");
     return file_content;
 }
 
-fn split_string_by_whitespace(some_string: String) -> Vec<String> {
+pub fn split_string_by_whitespace(some_string: String) -> Vec<String> {
     let split_up_string = some_string.split(" ").map(|s| s.to_string()).collect();
     return split_up_string;
 }
 
-fn scan() -> String {
+pub fn scan() -> String {
     String::from("A token")
 }
 
-#[test]
-fn some_test() {
-    let result = 2 + 2;
-    assert_eq!(result, 4);
-}
-
-#[test]
-fn test_read_source_file() {
-    let file_content = read_source_test_file();
-    assert_eq!(file_content, "x = 2 + 3;")
-}
-
-#[test]
-fn test_splitting_string() {
-    let file_content = read_source_test_file();
-    let split_up_string = split_string_by_whitespace(file_content);
-    let expected_result = vec![
-        String::from("x"),
-        String::from("="),
-        String::from("2"),
-        String::from("+"),
-        String::from("3;"),
-    ];
-    assert_eq!(split_up_string, expected_result);
-}
-
-#[test]
-fn test_create_token() {
-    let some_token = Token {
-        lexeme: String::from("+"),
-        token_type: TokenType::Plus,
-    };
-    assert!(some_token.token_type == TokenType::Plus);
-    assert_eq!(
-        some_token.lexeme,
-        String::from("+")
-    );
-}
-
-#[test]
-fn test_create_scanner() {
-    let source = String::from("123");
-    let scanner = Scanner {
-        source_text: source,
-        current_location: 10,
-    };
-    assert_eq!(scanner.source_text, String::from("123"));
-    assert_eq!(scanner.current_location, 10);
-}
-
-#[test]
-fn test_scanner_create_using_method() {
-    let scanner = Scanner::from(String::from("x=y+z"));
-    assert_eq!(scanner.source_text, String::from("x=y+z"));
-    assert_eq!(scanner.current_location, 0);
-}
-
-#[test]
-fn test_next_token() {
-    let mut scanner = Scanner::from(String::from("x=2+3+4"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("x"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("="));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("2"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("+"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("3"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("+"));
-    let token = scanner.next_token().expect("A token should exist");
-    assert_eq!(token.lexeme, String::from("4"));
-    assert!(scanner.next_token().is_none())
-}
-
-#[test]
-fn test_get_all_tokens() {
-    let mut scanner = Scanner::from(String::from("yz+ j"));
-    let all_tokens = scanner.get_all_tokens();
-    assert!(all_tokens.len() == 3);
-}
-
-#[test]
-fn test_with_long_identifiers() {
-    let mut scanner = Scanner::from(String::from("hello    from the other   sideeeeeee"));
-    let all_tokens = scanner.get_all_tokens();
-    assert!(all_tokens.len() == 5);
-}
-
-#[test]
-fn test_regular_expressions_to_find_first_identifier() {
-    let string_doesnt_start_with_id = String::from("123var1+23");
-    let string_starts_with_id = String::from("var1+var2");
-
-    let identifier_regex = Regex::new(r"^([A-Za-z]\w*)[^\w]").unwrap();
-
-    assert!(identifier_regex
-        .captures(string_doesnt_start_with_id.as_str())
-        .is_none());
-
-    let identifier_capture = identifier_regex
-        .captures(&string_starts_with_id)
-        .expect("should be able to capture identifier");
-    let whole_capture = identifier_capture.get(0).unwrap().as_str();
-    assert_eq!(whole_capture, "var1+");
-
-    // let whole_capture = captures.get(0).map_or("", |m| m.as_str());
-    // assert_eq!(whole_capture, "");
-}
