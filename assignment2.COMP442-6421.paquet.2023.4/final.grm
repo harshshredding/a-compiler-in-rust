@@ -35,13 +35,15 @@
 
 <fParamsTail> ::= ',' 'id' ':' <type> <rept-fParamsTail4> 
 
-<factor> ::= <variable> 
-<factor> ::= <functionCall> 
+<factor-option> ::= '(' <aParams> ')' 
+<factor-option> ::= <rept-variable2> 
+
 <factor> ::= 'intLit' 
 <factor> ::= 'floatLit' 
 <factor> ::= '(' <arithExpr> ')' 
 <factor> ::= 'not' <factor> 
 <factor> ::= <sign> <factor> 
+<factor> ::= <list-of-idnest> 'id' <factor-option> 
 
 <funcBody> ::= '{' <rept-funcBody1> '}' 
 
@@ -60,6 +62,8 @@
 <idnest> ::= 'id' <idnest-leftAmbi> 
 
 <indice> ::= '[' <arithExpr> ']' 
+
+<list-of-idnest> ::= <idnest> <list-of-idnest> 
 
 <localVarDecl> ::= 'localVar' 'id' ':' <type> <rept-localVarDecl4> ';' 
 <localVarDecl> ::= 'localVar' 'id' ':' <type> '(' <aParams> ')' ';' 
@@ -155,13 +159,15 @@
 <statBlock> ::= <statement> 
 <statBlock> ::= EPSILON 
 
-<statement> ::= <assignStat> ';' 
+<statement-option> ::= '(' <aParams> ')' ';' 
+<statement-option> ::= <rept-variable2> <assignOp> <expr> ';' 
+
 <statement> ::= 'if' '(' <relExpr> ')' 'then' <statBlock> 'else' <statBlock> ';' 
 <statement> ::= 'while' '(' <relExpr> ')' <statBlock> ';' 
 <statement> ::= 'read' '(' <variable> ')' ';' 
 <statement> ::= 'write' '(' <expr> ')' ';' 
 <statement> ::= 'return' '(' <expr> ')' ';' 
-<statement> ::= <functionCall> ';' 
+<statement> ::= <list-of-idnest> 'id' <statement-option> 
 
 <term> ::= <factor> <rightrec-term> 
 
