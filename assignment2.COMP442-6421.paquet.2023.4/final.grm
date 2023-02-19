@@ -49,24 +49,26 @@
 
 <funcDef> ::= <funcHead> <funcBody> 
 
-<funcHead> ::= 'function' <funcHeadLeftAmbi> 
+<funcHead-option> ::= 'sr' <sr-option> 
+<funcHead-option> ::= '(' <fParams> ')' 'arrow' <returnType> 
 
-<funcHeadLeftAmbi> ::= <opt-function-head-class-member> 'id' '(' <fParams> ')' 'arrow' <returnType> 
-<funcHeadLeftAmbi> ::= 'id' 'sr' 'constructor' '(' <fParams> ')' 
+<funcHead> ::= 'function' 'id' <funcHead-option> 
 
 <functionCall> ::= <rept-functionCall0> 'id' '(' <aParams> ')' 
 
-<idnest-leftAmbi> ::= <rept-idnest1> '.' 
-<idnest-leftAmbi> ::= '(' <aParams> ')' '.' 
+<idnest-leftAmbi> ::= <rept-idnest1> 
+<idnest-leftAmbi> ::= '(' <aParams> ')' 
 
-<idnest> ::= 'id' <idnest-leftAmbi> 
+<idnest> ::= 'id' <idnest-leftAmbi> '.' 
 
 <indice> ::= '[' <arithExpr> ']' 
 
 <list-of-idnest> ::= <idnest> <list-of-idnest> 
 
-<localVarDecl> ::= 'localVar' 'id' ':' <type> <rept-localVarDecl4> ';' 
-<localVarDecl> ::= 'localVar' 'id' ':' <type> '(' <aParams> ')' ';' 
+<localVarDecl-option> ::= <rept-localVarDecl4> ';' 
+<localVarDecl-option> ::= '(' <aParams> ')' ';' 
+
+<localVarDecl> ::= 'localVar' 'id' ':' <type> <localVarDecl-option> 
 
 <localVarDeclOrStmt> ::= <localVarDecl> 
 <localVarDeclOrStmt> ::= <statement> 
@@ -154,6 +156,9 @@
 
 <sign> ::= '+' 
 <sign> ::= '-' 
+
+<sr-option> ::= 'id' '(' <fParams> ')' 'arrow' <returnType> 
+<sr-option> ::= 'constructor' '(' <fParams> ')' 
 
 <statBlock> ::= '{' <rept-statBlock1> '}' 
 <statBlock> ::= <statement> 
