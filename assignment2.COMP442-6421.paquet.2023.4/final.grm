@@ -54,10 +54,16 @@
 
 <funcHead> ::= 'function' 'id' <funcHead-option> 
 
-<functionCall> ::= <rept-functionCall0> 'id' '(' <aParams> ')' 
+<idnest-bracket-list> ::= <idnest-bracket> <idnest-bracket-list> 
+
+<idnest-bracket> ::= <rept-idnest1> 'id' 
 
 <idnest-leftAmbi> ::= <rept-idnest1> 
 <idnest-leftAmbi> ::= '(' <aParams> ')' 
+
+<idnest-paren-list> ::= <idnest-paren> <idnest-paren-list> 
+
+<idnest-paren> ::= '(' <aParams> ')' 'id' 
 
 <idnest> ::= 'id' <idnest-leftAmbi> '.' 
 
@@ -180,7 +186,7 @@
 <type> ::= 'float' 
 <type> ::= 'id' 
 
-<variable> ::= <rept-variable0> 'id' <rept-variable2> 
+<variable> ::= <list-of-idnest> 'id' <rept-variable2> 
 
 <visibility> ::= 'public' 
 <visibility> ::= 'private' 
