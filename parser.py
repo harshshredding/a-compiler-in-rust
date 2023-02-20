@@ -133,6 +133,28 @@ def get_calgary_token(token) -> str:
             return 'write'
         case 'Read':
             return 'read'
+        case 'Class':
+            return 'class'
+        case 'Public':
+            return 'public'
+        case 'Private':
+            return 'private'
+        case 'FloatKeyword':
+            return 'float'
+        case 'IsA':
+            return 'isa'
+        case 'Attribute':
+            return 'attribute'
+        case 'Constructor':
+            return 'constructor'
+        case 'Sr':
+            return 'sr'
+        case 'Return':
+            return 'return'
+        case 'Asterix':
+            return 'mult'
+        case 'Period':
+            return 'dot'
         case _:
             raise RuntimeError(f"No way to handle tokenizer output '{token}'")
 

@@ -278,18 +278,18 @@ mod tests {
 
     #[test]
     fn test_get_reserved_keyword() {
-        let reserved_string = get_reserved_keyword_string(String::from("self y;"));
+        let reserved_string = get_reserved_keyword_string(String::from("constructor y;"));
         assert!(reserved_string.is_some());
-        assert_eq!(String::from("self"), reserved_string.unwrap());
+        assert_eq!(String::from("constructor"), reserved_string.unwrap());
 
 
         let reserved_string = get_reserved_keyword_string(String::from("selfa"));
         assert!(reserved_string.is_none());
 
 
-        let reserved_string = get_reserved_keyword_string(String::from("self$"));
+        let reserved_string = get_reserved_keyword_string(String::from("attribute$"));
         assert!(reserved_string.is_some());
-        assert_eq!(String::from("self"), reserved_string.unwrap());
+        assert_eq!(String::from("attribute"), reserved_string.unwrap());
     }
 
 
@@ -407,10 +407,10 @@ mod tests {
 
     #[test]
     fn test_get_reserved_word_token() {
-        let reserved_token = get_reserved_word_token(String::from("self y;"));
+        let reserved_token = get_reserved_word_token(String::from("read y;"));
         assert!(reserved_token.is_some());
         let reserved_token = reserved_token.unwrap();
-        assert_eq!(reserved_token, Token::from(TokenType::SelfKeyword, String::from("self")));
+        assert_eq!(reserved_token, Token::from(TokenType::Read, String::from("read")));
 
         // let reserved_string = get_reserved_keyword_string(String::from("selfa"));
         // assert!(reserved_string.is_none());

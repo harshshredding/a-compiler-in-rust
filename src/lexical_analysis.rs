@@ -80,7 +80,7 @@ pub enum TokenType {
     // while
     Write,
     // write
-    Float,
+    FloatKeyword,
     // float
     IntegerKeyword,
     // integer
@@ -99,8 +99,6 @@ pub enum TokenType {
     Sr,
     // sr
     LocalVar,
-    // localVar
-    SelfKeyword,
     // self
     WhiteSpace, // represents whitespaces
 }
@@ -225,7 +223,7 @@ pub fn get_integer_string(source_code_string: String) -> Option<String> {
 }
 
 pub fn get_float_token(source_code_string: String) -> Option<Token> {
-    return get_token_if_valid(get_float_string(source_code_string), TokenType::Float);
+    return get_token_if_valid(get_float_string(source_code_string), TokenType::FloatLit);
 }
 
 pub fn get_float_string(source_code_string: String) -> Option<String> {
@@ -302,10 +300,9 @@ pub fn get_reserved_word_token(source_code_string: String) -> Option<Token> {
         let reserved_keyword_string = reserved_keyword_string.unwrap();
         match reserved_keyword_string.as_str() {
             "integer" => return Some(Token { token_type: TokenType::IntegerKeyword, lexeme: reserved_keyword_string }),
-            "float" => return Some(Token { token_type: TokenType::Float, lexeme: reserved_keyword_string }),
+            "float" => return Some(Token { token_type: TokenType::FloatKeyword, lexeme: reserved_keyword_string }),
             "void" => return Some(Token { token_type: TokenType::Void, lexeme: reserved_keyword_string }),
             "class" => return Some(Token { token_type: TokenType::Class, lexeme: reserved_keyword_string }),
-            "self" => return Some(Token { token_type: TokenType::SelfKeyword, lexeme: reserved_keyword_string }),
             "isa" => return Some(Token { token_type: TokenType::IsA, lexeme: reserved_keyword_string }),
             "while" => return Some(Token { token_type: TokenType::While, lexeme: reserved_keyword_string }),
             "if" => return Some(Token { token_type: TokenType::If, lexeme: reserved_keyword_string }),
@@ -326,7 +323,7 @@ pub fn get_reserved_word_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_reserved_keyword_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(integer|float|void|class|self|isa|while|if|then|else|read|write|return|localvar|constructor|attribute|function|public|private)(\W|$)";
+    let regex_string = r"^(integer|float|void|class|isa|while|if|then|else|read|write|return|localvar|constructor|attribute|function|public|private)(\W|$)";
     return get_token_using_regex(regex_string.into(), source_code_string);
 }
 
