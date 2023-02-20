@@ -25,6 +25,9 @@
 <classDeclOrFuncDef> ::= <classDecl> 
 <classDeclOrFuncDef> ::= <funcDef> 
 
+<dotted-ids> ::= '.' 'id' <dotted-ids> 
+<dotted-ids> ::= EPSILON 
+
 <expr> ::= <arithExpr> <exprLeftAmbi> 
 
 <exprLeftAmbi> ::= EPSILON 
@@ -176,7 +179,7 @@
 <statement> ::= 'read' '(' <variable> ')' ';' 
 <statement> ::= 'write' '(' <expr> ')' ';' 
 <statement> ::= 'return' '(' <expr> ')' ';' 
-<statement> ::= 'id' <statement-option> 
+<statement> ::= 'id' <dotted-ids> <statement-option> 
 
 <term> ::= <factor> <rightrec-term> 
 
