@@ -58,7 +58,7 @@ pub enum TokenType {
     // eq
     GreaterThanOrEq,
     // geq
-    Greater,
+    GreaterThan,
     // gt
     LessThanOrEq,
     // leq
@@ -159,7 +159,7 @@ impl Scanner {
             ];
             let token_candidates: Vec<Option<Token>> = token_candidates.into_iter().filter(|x| x.is_some()).collect();
             if token_candidates.is_empty() {
-                panic!("Could not tokenize !!!");
+                panic!("Could not tokenize remaining string:\n{}", concerned_slice.as_str());
             }
             let mut longest_token: Option<Token> = None;
             for candidate in token_candidates {
@@ -244,6 +244,8 @@ pub fn get_operator_token(source_code_string: String) -> Option<Token> {
             "<>" => return Some(Token { token_type: TokenType::NotEqual, lexeme: operator_string }),
             "<=" => return Some(Token { token_type: TokenType::LessThanOrEq, lexeme: operator_string }),
             ">=" => return Some(Token { token_type: TokenType::GreaterThanOrEq, lexeme: operator_string }),
+            ">" => return Some(Token { token_type: TokenType::GreaterThan, lexeme: operator_string }),
+            "<" => return Some(Token { token_type: TokenType::LessThan, lexeme: operator_string }),
             "+" => return Some(Token { token_type: TokenType::Plus, lexeme: operator_string }),
             "-" => return Some(Token { token_type: TokenType::Minus, lexeme: operator_string }),
             "*" => return Some(Token { token_type: TokenType::Asterix, lexeme: operator_string }),
@@ -258,7 +260,7 @@ pub fn get_operator_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_operator_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(==|<>|<=|>=|\+|-|\*|/|=|and|or|not)";
+    let regex_string = r"^(==|<>|<=|>=|\+|-|\*|/|=|and|or|not|<|>)";
     return get_token_using_regex(regex_string.into(), source_code_string);
 }
 
@@ -355,9 +357,8 @@ pub fn get_string_from_captures(captures_option: Option<Captures>) -> Option<Str
     }
 }
 
-pub fn read_source_test_file() -> String {
-    let file_path = "src/test_resources/test_code.txt".to_string();
-    let file_content = fs::read_to_string(file_path).expect("Could not read contents of file");
+pub fn read_source_file(source_file_path: String) -> String {
+    let file_content = fs::read_to_string(source_file_path).expect("Could not read contents of file");
     return file_content;
 }
 

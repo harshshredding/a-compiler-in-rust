@@ -12,13 +12,15 @@ mod tests {
 
     #[test]
     fn test_read_source_file() {
-        let file_content = read_source_test_file();
+        let file_content = read_source_file(
+            String::from("src/test_resources/test_code.txt"));
         assert_eq!(file_content, "x = 2 + 3;")
     }
 
     #[test]
     fn test_splitting_string() {
-        let file_content = read_source_test_file();
+        let file_content = read_source_file(
+            String::from("src/test_resources/test_code.txt"));
         let split_up_string = split_string_by_whitespace(file_content);
         let expected_result = vec![
             String::from("x"),
