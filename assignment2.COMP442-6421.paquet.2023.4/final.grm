@@ -1,4 +1,4 @@
-<START> ::= <rept-START0> 
+<START> ::= <rept-START0> 'eof' 
 
 <aParams> ::= <expr> <rept-aParams1> 
 <aParams> ::= EPSILON 
@@ -43,7 +43,7 @@
 <factor> ::= '(' <arithExpr> ')' 
 <factor> ::= 'not' <factor> 
 <factor> ::= <sign> <factor> 
-<factor> ::= <list-of-idnest> 'id' <factor-option> 
+<factor> ::= 'id' <factor-option> 
 
 <funcBody> ::= '{' <rept-funcBody1> '}' 
 
@@ -68,8 +68,6 @@
 <idnest> ::= 'id' <idnest-leftAmbi> '.' 
 
 <indice> ::= '[' <arithExpr> ']' 
-
-<list-of-idnest> ::= <idnest> <list-of-idnest> 
 
 <localVarDecl-option> ::= <rept-localVarDecl4> ';' 
 <localVarDecl-option> ::= '(' <aParams> ')' ';' 
@@ -178,7 +176,7 @@
 <statement> ::= 'read' '(' <variable> ')' ';' 
 <statement> ::= 'write' '(' <expr> ')' ';' 
 <statement> ::= 'return' '(' <expr> ')' ';' 
-<statement> ::= <list-of-idnest> 'id' <statement-option> 
+<statement> ::= 'id' <statement-option> 
 
 <term> ::= <factor> <rightrec-term> 
 
@@ -186,7 +184,7 @@
 <type> ::= 'float' 
 <type> ::= 'id' 
 
-<variable> ::= <list-of-idnest> 'id' <rept-variable2> 
+<variable> ::= 'id' <rept-variable2> 
 
 <visibility> ::= 'public' 
 <visibility> ::= 'private' 
