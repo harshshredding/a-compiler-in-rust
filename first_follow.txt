@@ -1,0 +1,335 @@
+NON-TERMINAL: ADDOP
+FIRST-SET:  plus minus or
+FOLLOW-SET:  intlit floatlit lpar not id plus minus
+
+
+NON-TERMINAL: ARRAYSIZELEFTAMBI
+FIRST-SET:  intlit rsqbr
+FOLLOW-SET:  lsqbr semi rpar comma
+
+
+NON-TERMINAL: ASSIGNSTAT
+FIRST-SET:  id
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: CLASSDECL
+FIRST-SET:  class
+FOLLOW-SET:  eof class function
+
+
+NON-TERMINAL: EXPRLEFTAMBI
+FIRST-SET:  eq neq lt gt leq geq
+FOLLOW-SET:  comma rpar semi
+
+
+NON-TERMINAL: FACTOROPTION
+FIRST-SET:  lpar lsqbr
+FOLLOW-SET:  mult div and rsqbr eq neq lt gt leq geq plus minus or comma rpar semi
+
+
+NON-TERMINAL: FUNCDEF
+FIRST-SET:  function
+FOLLOW-SET:  eof class function
+
+
+NON-TERMINAL: FUNCBODY
+FIRST-SET:  lcurbr
+FOLLOW-SET:  eof class function
+
+
+NON-TERMINAL: FUNCHEAD
+FIRST-SET:  function
+FOLLOW-SET:  lcurbr
+
+
+NON-TERMINAL: FUNCHEADOPTION
+FIRST-SET:  sr lpar
+FOLLOW-SET:  lcurbr
+
+
+NON-TERMINAL: IDNESTBRACKET
+FIRST-SET:  id lsqbr
+FOLLOW-SET:  id lsqbr
+
+
+NON-TERMINAL: IDNESTBRACKETLIST
+FIRST-SET:  id lsqbr
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: IDNESTLEFTAMBI
+FIRST-SET:  lpar lsqbr
+FOLLOW-SET:  dot
+
+
+NON-TERMINAL: IDNESTPAREN
+FIRST-SET:  lpar
+FOLLOW-SET:  lpar
+
+
+NON-TERMINAL: IDNESTPARENLIST
+FIRST-SET:  lpar
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: LOCALVARDECLOPTION
+FIRST-SET:  semi lpar lsqbr
+FOLLOW-SET:  localvar if while read write return id rcurbr
+
+
+NON-TERMINAL: LOCALVARDECL
+FIRST-SET:  localvar
+FOLLOW-SET:  localvar if while read write return id rcurbr
+
+
+NON-TERMINAL: MEMBERFUNCDECL
+FIRST-SET:  function constructor
+FOLLOW-SET:  public private function constructor attribute rcurbr
+
+
+NON-TERMINAL: MEMBERVARDECL
+FIRST-SET:  attribute
+FOLLOW-SET:  public private function constructor attribute rcurbr
+
+
+NON-TERMINAL: OPTCLASSINHERITANCE
+FIRST-SET:  isa
+FOLLOW-SET:  lcurbr
+
+
+NON-TERMINAL: OPTFUNCTIONHEADCLASSMEMBER
+FIRST-SET:  id
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: ARITHEXPR
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  rsqbr eq neq lt gt leq geq comma rpar semi
+
+
+NON-TERMINAL: RELOP
+FIRST-SET:  eq neq lt gt leq geq
+FOLLOW-SET:  intlit floatlit lpar not id plus minus
+
+
+NON-TERMINAL: APARAMSTAIL
+FIRST-SET:  comma
+FOLLOW-SET:  comma rpar
+
+
+NON-TERMINAL: REPTAPARAMS1
+FIRST-SET:  comma
+FOLLOW-SET:  rpar
+
+
+NON-TERMINAL: MEMBERDECL
+FIRST-SET:  function constructor attribute
+FOLLOW-SET:  public private function constructor attribute rcurbr
+
+
+NON-TERMINAL: REPTCLASSDECL4
+FIRST-SET:  public private function constructor attribute
+FOLLOW-SET:  rcurbr
+
+
+NON-TERMINAL: REPTFPARAMS3
+FIRST-SET:  lsqbr
+FOLLOW-SET:  rpar comma
+
+
+NON-TERMINAL: FPARAMSTAIL
+FIRST-SET:  comma
+FOLLOW-SET:  comma rpar
+
+
+NON-TERMINAL: REPTFPARAMS4
+FIRST-SET:  comma
+FOLLOW-SET:  rpar
+
+
+NON-TERMINAL: REPTFPARAMSTAIL4
+FIRST-SET:  lsqbr
+FOLLOW-SET:  comma rpar
+
+
+NON-TERMINAL: LOCALVARDECLORSTMT
+FIRST-SET:  localvar if while read write return id
+FOLLOW-SET:  localvar if while read write return id rcurbr
+
+
+NON-TERMINAL: REPTFUNCBODY1
+FIRST-SET:  localvar if while read write return id
+FOLLOW-SET:  rcurbr
+
+
+NON-TERMINAL: REPTFUNCTIONCALL0
+FIRST-SET:  id
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: REPTIDNEST1
+FIRST-SET:  lsqbr
+FOLLOW-SET:  id dot
+
+
+NON-TERMINAL: REPTLOCALVARDECL4
+FIRST-SET:  lsqbr
+FOLLOW-SET:  semi
+
+
+NON-TERMINAL: ARRAYSIZE
+FIRST-SET:  lsqbr
+FOLLOW-SET:  lsqbr semi rpar comma
+
+
+NON-TERMINAL: REPTMEMBERVARDECL4
+FIRST-SET:  lsqbr
+FOLLOW-SET:  semi
+
+
+NON-TERMINAL: REPTOPTCLASSINHERITANCE2
+FIRST-SET:  comma
+FOLLOW-SET:  lcurbr
+
+
+NON-TERMINAL: CLASSDECLORFUNCDEF
+FIRST-SET:  class function
+FOLLOW-SET:  eof class function
+
+
+NON-TERMINAL: IDNEST
+FIRST-SET:  id
+FOLLOW-SET:  id
+
+
+NON-TERMINAL: REPTVARIABLE0
+FIRST-SET:  id
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: INDICE
+FIRST-SET:  lsqbr
+FOLLOW-SET:  mult div and lsqbr id dot rsqbr eq neq lt gt leq geq equal plus minus or comma rpar semi
+
+
+NON-TERMINAL: RIGHTRECARITHEXPR
+FIRST-SET:  plus minus or
+FOLLOW-SET:  rsqbr eq neq lt gt leq geq comma rpar semi
+
+
+NON-TERMINAL: MULTOP
+FIRST-SET:  mult div and
+FOLLOW-SET:  intlit floatlit lpar not id plus minus
+
+
+NON-TERMINAL: SIGN
+FIRST-SET:  plus minus
+FOLLOW-SET:  intlit floatlit lpar not id plus minus
+
+
+NON-TERMINAL: SROPTION
+FIRST-SET:  id constructor
+FOLLOW-SET:  lcurbr
+
+
+NON-TERMINAL: RETURNTYPE
+FIRST-SET:  void integer float id
+FOLLOW-SET:  semi lcurbr
+
+
+NON-TERMINAL: FPARAMS
+FIRST-SET:  id
+FOLLOW-SET:  rpar
+
+
+NON-TERMINAL: START
+FIRST-SET:  eof class function
+FOLLOW-SET: ∅
+
+
+NON-TERMINAL: REPTSTART0
+FIRST-SET:  class function
+FOLLOW-SET:  eof
+
+
+NON-TERMINAL: REPTSTATBLOCK1
+FIRST-SET:  if while read write return id
+FOLLOW-SET:  rcurbr
+
+
+NON-TERMINAL: STATEMENT
+FIRST-SET:  if while read write return id
+FOLLOW-SET:  else semi localvar if while read write return id rcurbr
+
+
+NON-TERMINAL: RELEXPR
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  rpar
+
+
+NON-TERMINAL: STATBLOCK
+FIRST-SET:  lcurbr if while read write return id
+FOLLOW-SET:  else semi
+
+
+NON-TERMINAL: DOTTEDIDS
+FIRST-SET:  dot
+FOLLOW-SET:  mult div and lpar equal lsqbr rsqbr eq neq lt gt leq geq plus minus or comma rpar semi
+
+
+NON-TERMINAL: STATEMENTOPTION
+FIRST-SET:  lpar equal lsqbr
+FOLLOW-SET:  else semi localvar if while read write return id rcurbr
+
+
+NON-TERMINAL: APARAMS
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  rpar
+
+
+NON-TERMINAL: ASSIGNOP
+FIRST-SET:  equal
+FOLLOW-SET:  intlit floatlit lpar not id plus minus
+
+
+NON-TERMINAL: EXPR
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  comma rpar semi
+
+
+NON-TERMINAL: TERM
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  rsqbr eq neq lt gt leq geq plus minus or comma rpar semi
+
+
+NON-TERMINAL: FACTOR
+FIRST-SET:  intlit floatlit lpar not id plus minus
+FOLLOW-SET:  mult div and rsqbr eq neq lt gt leq geq plus minus or comma rpar semi
+
+
+NON-TERMINAL: RIGHTRECTERM
+FIRST-SET:  mult div and
+FOLLOW-SET:  rsqbr eq neq lt gt leq geq plus minus or comma rpar semi
+
+
+NON-TERMINAL: TYPE
+FIRST-SET:  integer float id
+FOLLOW-SET:  rpar lcurbr comma lpar lsqbr semi
+
+
+NON-TERMINAL: VARIABLE
+FIRST-SET:  id
+FOLLOW-SET:  equal rpar
+
+
+NON-TERMINAL: REPTVARIABLE2
+FIRST-SET:  lsqbr
+FOLLOW-SET:  mult div and rsqbr eq neq lt gt leq geq equal plus minus or comma rpar semi
+
+
+NON-TERMINAL: VISIBILITY
+FIRST-SET:  public private
+FOLLOW-SET:  function constructor attribute
+
+
