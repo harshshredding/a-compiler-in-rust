@@ -41,38 +41,57 @@ def get_table_dict():
     return table_dict
 
 
-# PARSING
-def print_production(parts, focus_idx):
-    ret = ''
-    ret += ' '.join(parts[:focus_idx])
-    ret += ' *' + parts[focus_idx] + '* '
-    ret += ' '.join(parts[focus_idx + 1:])
+def print_production(derived_parts, production_parts, focus_idx, head, tail):
+    ret = 'START -> '
+    ret += ' '.join(head) + ' '
+    ret += ' '.join(derived_parts)
+    ret += ' *' + production_parts[focus_idx] + '* '
+    ret += ' '.join(production_parts[(focus_idx + 1):])
+    ret += ' ' + ' '.join(tail)
     print(ret)
 
 
-def parse_helper(table_dict, tokens, curr_non_terminal):
+def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_list):
     productions_dict = table_dict[curr_non_terminal]
     production = productions_dict[tokens[0]]
     production_parts = production.split()
     assert len(production_parts) >= 3, f"{production_parts}"
     assert production_parts[0] == curr_non_terminal
     assert production_parts[1] == '→'
-    assert production_parts[0].isupper(), f"reached production {production} with lowercase head"
+    assert production_parts[0].isupper(), f"reached {production}"
+    derived_parts = []
     for focus_idx, new_non_terminal in enumerate(production_parts[2:]):
-        print_production(production_parts, focus_idx + 2)
+        print_production(
+            derived_parts=derived_parts,
+            production_parts=production_parts,
+            focus_idx=focus_idx + 2,
+            head=head,
+            tail=tail
+        )
         if new_non_terminal.islower():
             if new_non_terminal != '&epsilon':
                 assert new_non_terminal == tokens[0]
                 tokens.pop(0)
+                derived_parts.append(new_non_terminal)
         else:
             assert new_non_terminal.isupper(), f"'{new_non_terminal}' is not a non-terminal"
-            parse_helper(table_dict, tokens, new_non_terminal)
+            derivation = parse_helper(
+                table_dict, tokens, new_non_terminal,
+                head=(head + derived_parts),
+                tail=(production_parts[(3 + focus_idx):] + tail),
+                terminal_list=terminal_list
+            )
+            for terminal in derivation:
+                assert terminal in terminal_list
+            derived_parts = derived_parts + derivation
+    return derived_parts
 
 
 def parse(table_dict, tokens):
     tokens = tokens + ['eof']
+    terminal_list = get_terminals_list()
     print("Starting parse")
-    parse_helper(table_dict, tokens, 'START')
+    parse_helper(table_dict, tokens, 'START', [''], [''], terminal_list=terminal_list)
     print("Parsed sucessfully!")
     assert not len(tokens), "all tokens should have been consumed"
 
