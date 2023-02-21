@@ -41,17 +41,17 @@ def get_table_dict():
     return table_dict
 
 
-def print_production(derived_parts, production_parts, focus_idx, head, tail):
+def print_production(derived_parts, production_parts, focus_idx, head, tail, output_file):
     ret = 'START -> '
     ret += ' '.join(head) + ' '
     ret += ' '.join(derived_parts)
     ret += ' *' + production_parts[focus_idx] + '* '
     ret += ' '.join(production_parts[(focus_idx + 1):])
     ret += ' ' + ' '.join(tail)
-    print(ret)
+    print(ret, file=output_file)
 
 
-def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_list):
+def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_list, output_file):
     productions_dict = table_dict[curr_non_terminal]
     production = productions_dict[tokens[0]]
     production_parts = production.split()
@@ -66,7 +66,8 @@ def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_lis
             production_parts=production_parts,
             focus_idx=focus_idx + 2,
             head=head,
-            tail=tail
+            tail=tail,
+            output_file=output_file
         )
         if new_non_terminal.islower():
             if new_non_terminal != '&epsilon':
@@ -79,7 +80,8 @@ def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_lis
                 table_dict, tokens, new_non_terminal,
                 head=(head + derived_parts),
                 tail=(production_parts[(3 + focus_idx):] + tail),
-                terminal_list=terminal_list
+                terminal_list=terminal_list,
+                output_file=output_file
             )
             for terminal in derivation:
                 assert terminal in terminal_list
@@ -87,12 +89,12 @@ def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_lis
     return derived_parts
 
 
-def parse(table_dict, tokens):
+def parse(table_dict, tokens, output_file):
     tokens = tokens + ['eof']
     terminal_list = get_terminals_list()
-    print("Starting parse")
-    parse_helper(table_dict, tokens, 'START', [''], [''], terminal_list=terminal_list)
-    print("Parsed sucessfully!")
+    print("Starting parse", file=output_file)
+    parse_helper(table_dict, tokens, 'START', [''], [''], terminal_list=terminal_list, output_file=output_file)
+    print("Parsed sucessfully!", file=output_file)
     assert not len(tokens), "all tokens should have been consumed"
 
 
@@ -196,12 +198,10 @@ def read_tokens_file(tokens_file_path) -> list[str]:
         return [token.strip() for token in tokens_file]
 
 
-def main():
-    tokens = read_tokens_file(sys.argv[1])
+def parse_file(input_tokens_file: str, output_derivation_file: str):
+    tokens = read_tokens_file(input_tokens_file)
     terminal_list = get_terminals_list()
     table_dict = get_table_dict()
     tokens = to_calgary(tokens, terminal_list)
-    parse(table_dict, tokens)
-
-
-main()
+    with open(output_derivation_file, 'w') as output_file:
+        parse(table_dict, tokens, output_file)
