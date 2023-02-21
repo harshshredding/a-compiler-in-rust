@@ -46,7 +46,7 @@
 <factor> ::= '(' <arithExpr> ')' 
 <factor> ::= 'not' <factor> 
 <factor> ::= <sign> <factor> 
-<factor> ::= 'id' <factor-option> 
+<factor> ::= 'id' <dotted-ids> <factor-option> 
 
 <funcBody> ::= '{' <rept-funcBody1> '}' 
 

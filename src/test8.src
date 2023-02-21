@@ -1,0 +1,21 @@
+function LINEAR::evaluate(x: float) => float
+{
+  localvar result: float;
+  result = 0.0;
+  result = a * x + b;
+  return (result);
+}
+
+function main() => void
+{
+  localvar f1: LINEAR(2, 3.5);
+  localvar f2: QUADRATIC(-2.0, 1.0, 0.0);
+  localvar counter: integer;
+
+  while(counter <= 10)
+  {
+    write(counter);
+    write(f1.evaluate(counter));
+    write(f2.evaluate(counter));
+  };
+}

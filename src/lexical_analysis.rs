@@ -227,7 +227,7 @@ pub fn get_float_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_float_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(((([1-9]\d*)|0)\.((\d+[1-9])|0))(e[+-](([1-9]\d*)|0))?)(\W|$)";
+    let regex_string = r"^(((([1-9]\d*)|0)\.((\d*[1-9])|0))(e[+-](([1-9]\d*)|0))?)(\W|$)";
     return get_token_using_regex(regex_string.into(), source_code_string);
 }
 

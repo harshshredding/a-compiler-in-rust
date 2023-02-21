@@ -398,6 +398,30 @@ mod tests {
             Token::from(TokenType::Void, String::from("void")),
         ];
         assert_eq!(all_tokens, truth);
+
+
+
+        let mut scanner = Scanner::from(String::from("3.5"));
+        let all_tokens = scanner.get_all_tokens();
+        let truth: Vec<Token> = vec![
+            Token::from(TokenType::FloatLit, String::from("3.5")),
+        ];
+        assert_eq!(all_tokens, truth);
+
+
+        let mut scanner = Scanner::from(String::from("f1: LINEAR(2, 3.5)"));
+        let all_tokens = scanner.get_all_tokens();
+        let truth: Vec<Token> = vec![
+            Token::from(TokenType::Identifier, String::from("f1")),
+            Token::from(TokenType::Colon, String::from(":")),
+            Token::from(TokenType::Identifier, String::from("LINEAR")),
+            Token::from(TokenType::OpenParenthesis, String::from("(")),
+            Token::from(TokenType::IntLit, String::from("2")),
+            Token::from(TokenType::Comma, String::from(",")),
+            Token::from(TokenType::FloatLit, String::from("3.5")),
+            Token::from(TokenType::CloseParenthesis, String::from(")")),
+        ];
+        assert_eq!(all_tokens, truth);
     }
 
     // #[test]

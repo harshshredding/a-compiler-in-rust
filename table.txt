@@ -517,8 +517,8 @@
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 <td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -532,26 +532,26 @@
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 <td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 <td><nonterm>DOTTEDIDS</nonterm> → <term>dot</term> <term>id</term> <nonterm>DOTTEDIDS</nonterm></td>
 <td>&nbsp;</td>
@@ -559,7 +559,7 @@
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
-<td>&nbsp;</td>
+<td><nonterm>DOTTEDIDS</nonterm> → &amp;epsilon</td>
 </tr>
 <tr><th><nonterm>EXPR</nonterm></th>
 <td>&nbsp;</td>
@@ -667,7 +667,7 @@
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td><nonterm>FACTOR</nonterm> → <term>id</term> <nonterm>FACTOROPTION</nonterm></td>
+<td><nonterm>FACTOR</nonterm> → <term>id</term> <nonterm>DOTTEDIDS</nonterm> <nonterm>FACTOROPTION</nonterm></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>

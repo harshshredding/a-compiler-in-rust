@@ -155,6 +155,12 @@ def get_calgary_token(token) -> str:
             return 'mult'
         case 'Period':
             return 'dot'
+        case 'FloatLit':
+            return 'floatlit'
+        case 'LessThanOrEq':
+            return 'leq'
+        case 'GreaterThanOrEq':
+            return 'geq'
         case _:
             raise RuntimeError(f"No way to handle tokenizer output '{token}'")
 
