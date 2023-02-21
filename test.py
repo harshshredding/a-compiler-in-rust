@@ -3,14 +3,15 @@ import subprocess
 from pathlib import Path
 from parser import parse_file
 
-# test_source_file_paths = glob.glob('test_cases/test_source_files/*.src')
-# for test_source_file in test_source_file_paths:
-#     file_name = Path(test_source_file).name
-#     file = Path(test_source_file).stem
-#     print(f"tokenizing {file_name}")
-#     subprocess.run(['cargo', 'run', test_source_file, f"test_cases/test_tokens_files/{file}.tokens"])
+print("TOKENIZATION PHASE:")
+test_source_file_paths = glob.glob('test_cases/test_source_files/*.src')
+for test_source_file in test_source_file_paths:
+    file_name = Path(test_source_file).name
+    file = Path(test_source_file).stem
+    print(f"tokenizing {file_name}")
+    subprocess.run(['cargo', 'run', test_source_file, f"test_cases/test_tokens_files/{file}.tokens"])
 
-
+print("PARSING PHASE:")
 test_token_file_paths = glob.glob('test_cases/test_tokens_files/*.tokens')
 for tokens_path in test_token_file_paths:
     tokens_file_name = Path(tokens_path).stem
