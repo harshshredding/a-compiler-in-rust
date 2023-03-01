@@ -1,0 +1,67 @@
+class POLYNOMIAL {
+  public function evaluate: (x: float) => float;
+};
+
+class LINEAR isa POLYNOMIAL {
+  private attribute a: float;
+  private attribute b: float;
+  public  constructor: (A: float, B: float);
+  public  function evaluate: (x: float) => float;
+};
+
+class QUADRATIC isa POLYNOMIAL {
+  private attribute a: float;
+  private attribute b: float;
+  private attribute c: float;
+  public  constructor: (A: float, B: float, C: float);
+  public  function evaluate: (x: float) => float;
+};
+
+function POLYNOMIAL::evaluate(x: float) => float
+{
+  return (0);
+}
+
+function QUADRATIC::evaluate(x: float) => float
+{
+  localvar result: float;
+  result = a;
+  result = result * x + b;
+  result = result * x + c;
+  return (result);
+}
+
+function QUADRATIC::constructor(A: float, B: float, C: float)
+{
+  self.a = A;
+  self.b = B;
+  self.c = C;
+}
+
+function LINEAR::constructor(A: float, B: float)
+{
+  self.a = A;
+  self.b = B;
+}
+
+function LINEAR::evaluate(x: float) => float
+{
+  localvar result: float;
+  result = 0.0;
+  result = a * x + b;
+  return (result);
+}
+
+function main() => void
+{
+  localvar f1: LINEAR(2, 3.5);
+  localvar f2: QUADRATIC(-2.0, 1.0, 0.0);
+  localvar counter: integer;
+
+  while(counter <= 10)
+  {
+    write(counter);
+    write(f1.evaluate(counter));
+    write(f2.evaluate(counter));
+  };
+}

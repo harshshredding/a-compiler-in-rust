@@ -1,0 +1,36 @@
+Starting parse
+START ->   *REPTSTART0* eof 
+START ->   *CLASSDECLORFUNCDEF* REPTSTART0 eof 
+START ->   *FUNCDEF*  REPTSTART0 eof 
+START ->   *FUNCHEAD* FUNCBODY REPTSTART0 eof 
+START ->   *function* id FUNCHEADOPTION FUNCBODY REPTSTART0 eof 
+START ->  function *id* FUNCHEADOPTION FUNCBODY REPTSTART0 eof 
+START ->  function id *FUNCHEADOPTION*  FUNCBODY REPTSTART0 eof 
+START ->  function id  *lpar* FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar *FPARAMS* rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar  *&epsilon*  rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar *rpar* arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar rpar *arrow* RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar rpar arrow *RETURNTYPE*  FUNCBODY REPTSTART0 eof 
+START ->  function id lpar rpar arrow  *void*  FUNCBODY REPTSTART0 eof 
+START ->  function id lpar rpar arrow void *FUNCBODY*  REPTSTART0 eof 
+START ->  function id lpar rpar arrow void  *lcurbr* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr *REPTFUNCBODY1* rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr  *LOCALVARDECLORSTMT* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr  *STATEMENT*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr  *id* DOTTEDIDS STATEMENTOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id *DOTTEDIDS* STATEMENTOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id  *&epsilon*  STATEMENTOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id *STATEMENTOPTION*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id  *REPTVARIABLE2* ASSIGNOP EXPR semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id  *&epsilon*  ASSIGNOP EXPR semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id  *ASSIGNOP* EXPR semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id  *equal*  EXPR semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal *EXPR* semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal  *ARITHEXPR* EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal  *TERM* RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal  *FACTOR* RIGHTRECTERM RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal  *id* DOTTEDIDS FACTOROPTION RIGHTRECTERM RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal id *DOTTEDIDS* FACTOROPTION RIGHTRECTERM RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal id  *&epsilon*  FACTOROPTION RIGHTRECTERM RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar rpar arrow void lcurbr id equal id *FACTOROPTION*  RIGHTRECTERM RIGHTRECARITHEXPR EXPRLEFTAMBI semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 

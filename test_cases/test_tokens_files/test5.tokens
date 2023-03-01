@@ -1,0 +1,14 @@
+Function
+Identifier
+OpenParenthesis
+CloseParenthesis
+Arrow
+Void
+OpenCurly
+Identifier
+EqualsSymbol
+Identifier
+EqualsSymbol
+IntLit
+SemiColon
+CloseCurly

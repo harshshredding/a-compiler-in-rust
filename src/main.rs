@@ -3,6 +3,8 @@
 mod lexical_analysis;
 mod synthesis;
 mod tests_lexical_analysis;
+mod semantic_analysis;
+mod syntactic_analysis;
 
 use lexical_analysis::read_source_file;
 use lexical_analysis::Scanner;
@@ -10,6 +12,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use crate::lexical_analysis::Token;
 use std::env;
+use regex::{Captures, Regex};
 
 
 fn write_tokens_to_file(tokens: Vec<Token>, output_file_path: String) -> std::io::Result<()>  {
@@ -33,3 +36,13 @@ fn main() -> std::io::Result<()> {
     println!("successfully generated {}", output_tokens_file_path.as_str());
     Ok(())
 }
+
+
+// #[test]
+// fn test_regex() {
+//     println!("hello world!");
+// }
+//
+// fn test_regex() {
+//     let compiled_regex_obj = Regex::new("x").unwrap();
+// }

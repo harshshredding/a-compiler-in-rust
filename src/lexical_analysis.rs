@@ -1,4 +1,5 @@
 use regex::{Captures, Regex};
+use lazy_static::lazy_static;
 use std::fs;
 
 // ,, +, -, or, [, intLit, ], =, class, id, {, }, ;, (, ), floatLit, not, :, void, ., *, /, and,
@@ -102,6 +103,18 @@ pub enum TokenType {
     // self
     WhiteSpace, // represents whitespaces
 }
+
+
+lazy_static! {
+    static ref IDENTIFIER_REGEX: Regex = Regex::new(r"^([A-Za-z]\w*)(\W|$)").unwrap();
+    static ref INTEGER_REGEX: Regex = Regex::new(r"^(([1-9]\d*)|0)(\W|$)").unwrap();
+    static ref FLOAT_REGEX: Regex = Regex::new(r"^(((([1-9]\d*)|0)\.((\d*[1-9])|0))(e[+-](([1-9]\d*)|0))?)(\W|$)").unwrap();
+    static ref OPERATOR_REGEX: Regex = Regex::new(r"^(==|<>|<=|>=|\+|-|\*|/|=|and|or|not|<|>)").unwrap();
+    static ref PUNCTUATION_REGEX: Regex = Regex::new(r"^(::|=>|\(|\)|\{|\}|\[|\]|;|,|\.|:)").unwrap();
+    static ref RESERVED_WORD_REGEX: Regex = Regex::new(r"^(integer|float|void|class|isa|while|if|then|else|read|write|return|localvar|constructor|attribute|function|public|private)(\W|$)").unwrap();
+    static ref WHITESPACE_REGEX: Regex = Regex::new(r"^(\s+)(\S|$)").unwrap();
+}
+
 
 #[derive(PartialEq, Eq, Debug)]
 pub struct Token {
@@ -209,8 +222,8 @@ pub fn get_identifier_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_identifier_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^([A-Za-z]\w*)(\W|$)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = IDENTIFIER_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 pub fn get_integer_token(source_code_string: String) -> Option<Token> {
@@ -218,8 +231,8 @@ pub fn get_integer_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_integer_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(([1-9]\d*)|0)(\W|$)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = INTEGER_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 pub fn get_float_token(source_code_string: String) -> Option<Token> {
@@ -227,8 +240,8 @@ pub fn get_float_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_float_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(((([1-9]\d*)|0)\.((\d*[1-9])|0))(e[+-](([1-9]\d*)|0))?)(\W|$)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = FLOAT_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 pub fn get_operator_token(source_code_string: String) -> Option<Token> {
@@ -258,8 +271,8 @@ pub fn get_operator_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_operator_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(==|<>|<=|>=|\+|-|\*|/|=|and|or|not|<|>)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = OPERATOR_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 pub fn get_punctuation_token(source_code_string: String) -> Option<Token> {
@@ -287,8 +300,8 @@ pub fn get_punctuation_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_punctuation_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(::|=>|\(|\)|\{|\}|\[|\]|;|,|\.|:)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = PUNCTUATION_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 
@@ -323,8 +336,8 @@ pub fn get_reserved_word_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_reserved_keyword_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(integer|float|void|class|isa|while|if|then|else|read|write|return|localvar|constructor|attribute|function|public|private)(\W|$)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = RESERVED_WORD_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 
@@ -333,8 +346,8 @@ pub fn get_whitespace_token(source_code_string: String) -> Option<Token> {
 }
 
 pub fn get_whitespaces_string(source_code_string: String) -> Option<String> {
-    let regex_string = r"^(\s+)(\S|$)";
-    return get_token_using_regex(regex_string.into(), source_code_string);
+    let captures = WHITESPACE_REGEX.captures(&source_code_string);
+    return get_string_from_captures(captures);
 }
 
 pub fn get_token_using_regex(regex: String, source_code_string: String) -> Option<String> {

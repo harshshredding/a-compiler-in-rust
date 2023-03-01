@@ -1,0 +1,93 @@
+Starting parse
+START ->   *REPTSTART0* eof 
+START ->   *CLASSDECLORFUNCDEF* REPTSTART0 eof 
+START ->   *FUNCDEF*  REPTSTART0 eof 
+START ->   *FUNCHEAD* FUNCBODY REPTSTART0 eof 
+START ->   *function* id FUNCHEADOPTION FUNCBODY REPTSTART0 eof 
+START ->  function *id* FUNCHEADOPTION FUNCBODY REPTSTART0 eof 
+START ->  function id *FUNCHEADOPTION*  FUNCBODY REPTSTART0 eof 
+START ->  function id  *lpar* FPARAMS rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar *FPARAMS* rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar  *id* colon TYPE REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id *colon* TYPE REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon *TYPE* REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon  *integer*  REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer *REPTFPARAMS3* REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer  *ARRAYSIZE* REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer  *lsqbr* ARRAYSIZELEFTAMBI REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr *ARRAYSIZELEFTAMBI*  REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr  *rsqbr*  REPTFPARAMS3 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr *REPTFPARAMS3*  REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr  *&epsilon*  REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr *REPTFPARAMS4*  rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr  *FPARAMSTAIL* REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr  *comma* id colon TYPE REPTFPARAMSTAIL4 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma *id* colon TYPE REPTFPARAMSTAIL4 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id *colon* TYPE REPTFPARAMSTAIL4 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon *TYPE* REPTFPARAMSTAIL4 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon  *integer*  REPTFPARAMSTAIL4 REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer *REPTFPARAMSTAIL4*  REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer  *&epsilon*  REPTFPARAMS4 rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer *REPTFPARAMS4*  rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer  *&epsilon*  rpar arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer *rpar* arrow RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar *arrow* RETURNTYPE FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow *RETURNTYPE*  FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow  *void*  FUNCBODY REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void *FUNCBODY*  REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void  *lcurbr* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr *REPTFUNCBODY1* rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr  *LOCALVARDECLORSTMT* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr  *LOCALVARDECL*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr  *localvar* id colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar *id* colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id *colon* TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon *TYPE* LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon  *integer*  LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer *LOCALVARDECLOPTION*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer  *REPTLOCALVARDECL4* semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer  *&epsilon*  semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer  *semi*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi *REPTFUNCBODY1*  rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi  *LOCALVARDECLORSTMT* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi  *LOCALVARDECL*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi  *localvar* id colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar *id* colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id *colon* TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon *TYPE* LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon  *integer*  LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer *LOCALVARDECLOPTION*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer  *REPTLOCALVARDECL4* semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer  *&epsilon*  semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer  *semi*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi *REPTFUNCBODY1*  rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi  *LOCALVARDECLORSTMT* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi  *LOCALVARDECL*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi  *localvar* id colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar *id* colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id *colon* TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon *TYPE* LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon  *integer*  LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer *LOCALVARDECLOPTION*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *REPTLOCALVARDECL4* semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *&epsilon*  semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *semi*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi *REPTFUNCBODY1*  rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi  *LOCALVARDECLORSTMT* REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi  *LOCALVARDECL*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi  *localvar* id colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar *id* colon TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id *colon* TYPE LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon *TYPE* LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon  *integer*  LOCALVARDECLOPTION REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer *LOCALVARDECLOPTION*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *REPTLOCALVARDECL4* semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *&epsilon*  semi REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer  *semi*  REPTFUNCBODY1 rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi *REPTFUNCBODY1*  rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi  *&epsilon*  rcurbr REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi *rcurbr*  REPTSTART0 eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi rcurbr *REPTSTART0*  eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi rcurbr  *&epsilon*  eof 
+START ->  function id lpar id colon integer lsqbr rsqbr comma id colon integer rpar arrow void lcurbr localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi localvar id colon integer semi rcurbr *eof*  
+Parsed sucessfully!
