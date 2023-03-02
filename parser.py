@@ -78,8 +78,8 @@ def parse_helper(table_dict, tokens, curr_non_terminal, head, tail, terminal_lis
             assert new_non_terminal.isupper(), f"'{new_non_terminal}' is not a non-terminal"
             derivation = parse_helper(
                 table_dict, tokens, new_non_terminal,
-                head=(head + derived_parts),
-                tail=(production_parts[(3 + focus_idx):] + tail),
+                head=(head + derived_parts),  # copy
+                tail=(production_parts[(3 + focus_idx):] + tail),  # copy
                 terminal_list=terminal_list,
                 output_file=output_file
             )

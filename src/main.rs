@@ -5,6 +5,7 @@ mod synthesis;
 mod tests_lexical_analysis;
 mod semantic_analysis;
 mod syntactic_analysis;
+mod tests_syntactic_analysis;
 
 use lexical_analysis::read_source_file;
 use lexical_analysis::Scanner;
