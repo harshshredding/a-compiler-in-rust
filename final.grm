@@ -72,7 +72,7 @@
 
 <indice> ::= '[' <arithExpr> ']' 
 
-<localVarDecl-option> ::= <rept-localVarDecl4> ';' 
+<localVarDecl-option> ::= <rept-localVarDecl4> ';'
 <localVarDecl-option> ::= '(' <aParams> ')' ';' 
 
 <localVarDecl> ::= 'localVar' 'id' ':' <type> <localVarDecl-option> 

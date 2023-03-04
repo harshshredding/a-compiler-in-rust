@@ -1,0 +1,18 @@
+<arithExpr> ::= <term> <add-terms> 'eof'
+<add-terms> ::= EPSILON
+<add-terms> ::= <addOp> <arithExpr>
+
+<term> ::= <literal> <multiply-literals>
+<multiply-literals> ::= <multOp> <term>
+<multiply-literals> ::= EPSILON
+
+<literal> ::= 'intLit'
+<literal> ::= 'floatLit'
+
+<multOp> ::= '*'
+<multOp> ::= '/'
+<multOp> ::= 'and'
+
+<addOp> ::= '+'
+<addOp> ::= '-'
+<addOp> ::= 'or'

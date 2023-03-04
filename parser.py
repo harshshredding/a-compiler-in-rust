@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import sys
+import json
 from IPython.core import ultratb
+from pathlib import Path
 
 sys.excepthook = ultratb.FormattedTB(color_scheme='Linux', call_pdb=False)
 
@@ -16,9 +18,16 @@ def get_terminals_list():
     return terminal_list
 
 
-def get_table_dict():
+def write_terminals_list():
+    list_of_all_terminals = get_terminals_list()
+    with open('all_terminals.txt', 'w') as terminals_file:
+        for terminal in list_of_all_terminals:
+            print(terminal, file=terminals_file)
+
+
+def get_table_dict(html_table_path):
     # READ L1 TABLE
-    with open('table.txt', 'r') as table_file:
+    with open(html_table_path, 'r') as table_file:
         html_content = table_file.read()
     soup = BeautifulSoup(html_content, 'lxml')
     terminals_row = soup.find('tr')
@@ -39,6 +48,16 @@ def get_table_dict():
         table_dict[non_terminal] = production_dict
     assert len(table_dict) == len(non_terminal_rows)
     return table_dict
+
+
+def write_table_dict_for_rust(html_table_path: str):
+    assert html_table_path.endswith(".html")
+    table_dict = get_table_dict(html_table_path)
+    html_table_path = Path(html_table_path)
+    folder_path = html_table_path.parent
+    table_name = html_table_path.stem
+    with open(f'{folder_path}/{table_name}.json', 'w') as table_json_file:
+        json.dump(table_dict, fp=table_json_file, indent=4)
 
 
 def print_production(derived_parts, production_parts, focus_idx, head, tail, output_file):

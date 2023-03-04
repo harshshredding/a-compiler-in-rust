@@ -1,8 +1,10 @@
-use super::lexical_analysis::Scanner;
+use super::lexical_analysis::*;
 use std::collections::HashMap;
-use super::syntactic_analysis::get_calgary_token;
+use super::syntactic_analysis::*;
 use std::fs::File;
 use std::io::Write;
+use serde::{Serialize, Deserialize};
+use serde::de::Unexpected::Map;
 
 #[cfg(test)]
 
@@ -16,6 +18,67 @@ fn test_split_a_string() {
     let string = String::from("a → X + Y");
     let split_string: Vec<&str> = string.split_whitespace().collect();
     assert_eq!(split_string, vec!["a","→","X","+","Y"])
+}
+
+#[test]
+fn test_slice() {
+    let strings = vec!["hello", "world", "."];
+    let slice = &strings[1..];
+    assert_eq!(slice.len(), 2);
+    let strings: Vec<String> = slice.into_iter().map(|x| x.to_string()).collect();
+    assert_eq!(strings, vec![String::from("world"), String::from(".")]);
+    for (i, el) in strings.iter().enumerate() {
+        if i == 0 {
+            assert_eq!(el.as_str(), "world");
+        } else {
+            assert_eq!(el.as_str(), ".")
+        }
+    }
+}
+
+#[test]
+fn test_string_comparison() {
+    let some_string = "hello";
+    if some_string != "hello" {
+        panic!("String should be equal")
+    }
+}
+
+#[test]
+fn test_get_terminals_list() {
+    let terminals_list = get_terminal_list();
+    assert_eq!(terminals_list.len(), 49);
+    assert_eq!(terminals_list[3], "id".to_string())
+}
+
+#[test]
+fn test_reading_json() {
+    let a_dict: HashMap<String, String> = serde_json::from_str("{\"x\": \"x2\", \"y\":\"y2\"}").unwrap();
+    assert_eq!(a_dict["x"], "x2");
+}
+
+#[test]
+fn test_read_table_dict() {
+    let table_dict = get_table_dict();
+    assert_eq!(table_dict["ADDOP"].len(), 3);
+    assert_eq!(table_dict["INDICE"]["lsqbr"], "INDICE \u{2192} lsqbr ARITHEXPR rsqbr");
+}
+
+#[test]
+fn test_parse() {
+    let source_file_content = read_source_file("test.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict();
+    let mut output_file = File::create("out.derivation").expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file)
+}
+
+#[test]
+fn test_is_uppercase() {
+    assert!("LOVE123".chars().all(is_uppercase_or_number))
 }
 
 #[test]

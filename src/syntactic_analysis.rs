@@ -3,7 +3,8 @@ use crate::lexical_analysis::Token;
 use super::lexical_analysis::TokenType;
 use super::lexical_analysis::Scanner;
 use std::fs::File;
-use std::io::Write;
+use std::{fs, io};
+use std::io::{BufRead, Write};
 
 pub fn get_calgary_token(token: TokenType) -> String {
     match token {
@@ -53,16 +54,121 @@ pub fn get_calgary_token(token: TokenType) -> String {
 }
 
 
+pub fn write_production(
+    derived_parts: &Vec<String>,
+    production_parts: &Vec<&str>,
+    focus_idx: usize,
+    head: &Vec<String>,
+    tail: &Vec<String>,
+    mut output_file: &File
+) {
+    let mut ret = String::from("START -> ");
+    ret.push_str(&head.join(" "));
+    ret.push_str(" ");
+    ret.push_str(&derived_parts.join(" "));
+    ret.push_str(" ");
+    ret.push_str(&format!("*{}*", production_parts[focus_idx]));
+    ret.push_str(" ");
+    ret.push_str(&production_parts[(focus_idx + 1)..].join(" "));
+    ret.push_str(" ");
+    ret.push_str(&tail.join(" "));
+    ret.push_str("\n");
+    output_file.write_all(ret.as_bytes()).expect(&format!("Failed to write to file: {}", &ret))
+}
+
 pub fn parser_helper(
     table_dict: &HashMap<String, HashMap<String, String>>,
-    mut calgary_tokens: Vec<String>,
+    calgary_tokens: &mut Vec<String>,
     curr_non_terminal: String,
     head: Vec<String>,
     tail: Vec<String>,
     terminal_list: &Vec<String>,
-    mut file: &File,
-) {
+    output_file: &File)
+    -> Vec<String>
+{
     let productions_dict = &table_dict[&curr_non_terminal];
     let production = &productions_dict[&calgary_tokens[0]];
-    
+    let production_parts: Vec<&str> = production.split_whitespace().collect();
+    assert!(production_parts.len() >= 3, "We need at least 3 elements in a production.\
+                                          Production {}", production.as_str());
+    assert_eq!(production_parts[0], curr_non_terminal.as_str());
+    assert_eq!(production_parts[1], "→");
+    assert!(production_parts[0].chars().all(is_uppercase_or_number),
+            "Non terminals should be UPPERCASE OR NUMERIC {}", production_parts[0]);
+    let mut derived_parts: Vec<String> = vec![];
+    for (focus_idx, production_element) in production_parts[2..].iter().enumerate() {
+        write_production(
+            &derived_parts,
+            &production_parts,
+            focus_idx + 2,
+            &head,
+            &tail,
+            output_file
+        );
+        if production_element.chars().all(char::is_lowercase) || (*production_element == "&epsilon") {
+            // we found a terminal
+            if (*production_element) != "&epsilon" {
+                assert_eq!(production_element, &calgary_tokens[0]);
+                calgary_tokens.remove(0);
+                derived_parts.push(production_element.to_string());
+            }
+        } else {
+            assert!(production_element.chars().all(is_uppercase_or_number),
+                    "Non terminal element should be UPPERCASE OR NUMERIC {}", production_element);
+            let mut new_head = head.clone();
+            new_head.extend(derived_parts.clone());
+            let mut new_tail: Vec<String> = production_parts[(3 + focus_idx)..].to_vec().into_iter().map(|s|s.to_string()).collect();
+            new_tail.extend(tail.clone());
+            let derivation = parser_helper(
+                table_dict,
+                calgary_tokens,
+                production_element.to_string(),
+                new_head,
+                new_tail,
+                terminal_list,
+                output_file
+            );
+            for terminal in &derivation {
+                assert!(terminal_list.contains(terminal))
+            }
+            derived_parts.extend(derivation);
+        }
+    }
+    return derived_parts;
+}
+
+pub fn is_uppercase_or_number(c: char) -> bool {
+    return c.is_uppercase() || c.is_numeric()
+}
+
+pub fn get_terminal_list() -> Vec<String> {
+    let file = File::open("all_terminals.txt").unwrap();
+    let lines = io::BufReader::new(file).lines();
+    let terminal_list: Vec<String> = lines.into_iter().map(|x| x.unwrap()).collect();
+    return terminal_list
+}
+
+pub fn get_table_dict() -> HashMap<String, HashMap<String, String>> {
+    let table_dict_string = fs::read_to_string("table_dict.json").unwrap();
+    let table_dict: HashMap<String, HashMap<String, String>> = serde_json::from_str(&table_dict_string).unwrap();
+    return table_dict
+}
+
+pub fn parse(
+    table_dict: &HashMap<String, HashMap<String, String>>,
+    calgary_tokens: &mut Vec<String>,
+    mut output_file: &File
+) {
+    calgary_tokens.push("eof".to_string());
+    let terminal_list = get_terminal_list();
+    parser_helper(
+        table_dict,
+        calgary_tokens,
+        "START".to_string(),
+        vec![],
+        vec![],
+        &terminal_list,
+        output_file
+    );
+    output_file.write_all("\n Parsed Succesfully".as_bytes()).expect("Failed to write");
 }
