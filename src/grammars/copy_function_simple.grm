@@ -6,9 +6,13 @@
 <arraysizpostfix> ::= 'intLit' ']' 
 <arraysizpostfix> ::= ']' 
 
+<funcDef> ::= 'function' 'id' '(' ')' '{' <listlocalvardecl> '}' 
+
+<listlocalvardecl> ::= <localvardecl> <listlocalvardecl> 
+
 <localvardecl> ::= 'localVar' 'id' ':' <type> <arraylist> ';' 
 
-<start> ::= <localvardecl> 'eof' 
+<start> ::= <funcDef> 'eof' 
 
 <type> ::= 'integer' 
 <type> ::= 'float' 

@@ -1,0 +1,25 @@
+{
+    "ARRAYLIST": {
+        "$": "ARRAYLIST \u2192 &epsilon",
+        "semi": "ARRAYLIST \u2192 &epsilon",
+        "lsqbr": "ARRAYLIST \u2192 ARRAYSIZE ARRAYLIST"
+    },
+    "ARRAYSIZE": {
+        "lsqbr": "ARRAYSIZE \u2192 lsqbr ARRAYSIZPOSTFIX"
+    },
+    "ARRAYSIZPOSTFIX": {
+        "rsqbr": "ARRAYSIZPOSTFIX \u2192 rsqbr",
+        "intlit": "ARRAYSIZPOSTFIX \u2192 intlit rsqbr"
+    },
+    "LOCALVARDECL": {
+        "localvar": "LOCALVARDECL \u2192 localvar id colon TYPE ARRAYLIST semi"
+    },
+    "START": {
+        "localvar": "START \u2192 LOCALVARDECL eof"
+    },
+    "TYPE": {
+        "id": "TYPE \u2192 id",
+        "float": "TYPE \u2192 float",
+        "integer": "TYPE \u2192 integer"
+    }
+}

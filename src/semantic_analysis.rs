@@ -340,10 +340,10 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
                 SyntaxElement("float".into()),
             ]
         }
-        "TYPE → int" => {
+        "TYPE → integer" => {
             return vec![
                 SemanticElement(Box::new(StoreValue{value: "IntType".to_string()})),
-                SyntaxElement("int".into()),
+                SyntaxElement("integer".into()),
             ]
         }
         "START → LOCALVARDECL eof" => {

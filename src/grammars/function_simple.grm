@@ -1,4 +1,6 @@
-<start> ::= <localvardecl> 'eof'
+<start> ::= <funcDef> 'eof'
+<funcDef> ::= 'function' 'id' '(' ')' '{' <listlocalvardecl> '}'
+<listlocalvardecl> ::= <localvardecl> <listlocalvardecl>
 <localvardecl> ::= 'localVar' 'id' ':' <type> <arraylist> ';'
 <type> ::= 'integer'
 <type> ::= 'float'

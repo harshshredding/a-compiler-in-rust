@@ -89,6 +89,34 @@ fn test_arith_parse() {
     parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/arith.dot")
 }
 
+
+#[test]
+fn test_localvar_parse() {
+    let source_file_content = read_source_file("src/syntax_tests/src/localvardecl.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict("src/grammars/localvardecl_table.json");
+    let output_file = File::create("src/syntax_tests/out/localvardecl.derivation")
+        .expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/localvardecl.dot")
+}
+
+
+#[test]
+fn test_localvar_parse_harder() {
+    let source_file_content = read_source_file("src/syntax_tests/src/localvardecl2.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict("src/grammars/localvardecl_table.json");
+    let output_file = File::create("src/syntax_tests/out/localvardecl2.derivation")
+        .expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/localvardecl2.dot")
+}
+
 #[test]
 fn test_generate_graph_file() {
     let edges = Edges(

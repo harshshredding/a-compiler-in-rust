@@ -6,9 +6,13 @@ ARRAYSIZE -> lsqbr ARRAYSIZPOSTFIX  .
 ARRAYSIZPOSTFIX -> intlit rsqbr  . 
 ARRAYSIZPOSTFIX -> rsqbr  . 
 
+FUNCDEF -> function id lpar rpar lcurbr LISTLOCALVARDECL rcurbr  . 
+
+LISTLOCALVARDECL -> LOCALVARDECL LISTLOCALVARDECL  . 
+
 LOCALVARDECL -> localvar id colon TYPE ARRAYLIST semi  . 
 
-START -> LOCALVARDECL eof  . 
+START -> FUNCDEF eof  . 
 
 TYPE -> integer  . 
 TYPE -> float  . 
