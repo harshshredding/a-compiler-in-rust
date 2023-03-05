@@ -1,0 +1,10 @@
+<start> ::= <localvardecl> 'eof'
+<localvardecl> ::= 'localVar' 'id' ':' <type> <arraylist> ';'
+<type> ::= 'int'
+<type> ::= 'float'
+<type> ::= 'id'
+<arraylist> ::= <arraysize> <arraylist>
+<arraylist> ::= EPSILON
+<arraysize> ::= '[' <arraysizpostfix>
+<arraysizpostfix> ::= 'intLit' ']'
+<arraysizpostfix> ::= ']'

@@ -1,0 +1,17 @@
+ARRAYLIST -> ARRAYSIZE ARRAYLIST  . 
+ARRAYLIST ->  . 
+
+ARRAYSIZE -> lsqbr ARRAYSIZPOSTFIX  . 
+
+ARRAYSIZPOSTFIX -> intlit rsqbr  . 
+ARRAYSIZPOSTFIX -> rsqbr  . 
+
+LOCALVARDECL -> localvar id colon TYPE ARRAYLIST semi  . 
+
+START -> LOCALVARDECL eof  . 
+
+TYPE -> int  . 
+TYPE -> float  . 
+TYPE -> id  . 
+
+

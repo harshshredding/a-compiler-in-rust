@@ -73,8 +73,8 @@ fn test_parse() {
     let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
         .map(|token| get_calgary_token(token.token_type)).collect();
     let table_dict = get_table_dict("src/grammars/full_table.json");
-    let mut output_file = File::create("src/syntax_tests/out/test.derivation").expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file)
+    let output_file = File::create("src/syntax_tests/out/test.derivation").expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/arith.dot")
 }
 
 #[test]
@@ -85,8 +85,8 @@ fn test_arith_parse() {
     let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
         .map(|token| get_calgary_token(token.token_type)).collect();
     let table_dict = get_table_dict("src/grammars/arith_table.json");
-    let mut output_file = File::create("src/syntax_tests/out/arith.derivation").expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file)
+    let output_file = File::create("src/syntax_tests/out/arith.derivation").expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/arith.dot")
 }
 
 #[test]
