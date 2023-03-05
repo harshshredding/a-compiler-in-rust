@@ -9,7 +9,7 @@ sys.excepthook = ultratb.FormattedTB(color_scheme='Linux', call_pdb=False)
 
 def get_terminals_list():
     # READ L1 TABLE
-    with open('table.txt', 'r') as table_file:
+    with open('src/grammars/full_table.html', 'r') as table_file:
         html_content = table_file.read()
     soup = BeautifulSoup(html_content, 'lxml')
     terminals_row = soup.find('tr')

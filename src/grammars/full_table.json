@@ -1,0 +1,416 @@
+{
+    "ADDOP": {
+        "minus": "ADDOP \u2192 minus",
+        "plus": "ADDOP \u2192 plus",
+        "or": "ADDOP \u2192 or"
+    },
+    "APARAMS": {
+        "id": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "rpar": "APARAMS \u2192 &epsilon",
+        "lpar": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "minus": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "plus": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "not": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "floatlit": "APARAMS \u2192 EXPR REPTAPARAMS1",
+        "intlit": "APARAMS \u2192 EXPR REPTAPARAMS1"
+    },
+    "APARAMSTAIL": {
+        "comma": "APARAMSTAIL \u2192 comma EXPR"
+    },
+    "ARITHEXPR": {
+        "id": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "lpar": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "minus": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "plus": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "not": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "floatlit": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR",
+        "intlit": "ARITHEXPR \u2192 TERM RIGHTRECARITHEXPR"
+    },
+    "ARRAYSIZE": {
+        "lsqbr": "ARRAYSIZE \u2192 lsqbr ARRAYSIZELEFTAMBI"
+    },
+    "ARRAYSIZELEFTAMBI": {
+        "rsqbr": "ARRAYSIZELEFTAMBI \u2192 rsqbr",
+        "intlit": "ARRAYSIZELEFTAMBI \u2192 intlit rsqbr"
+    },
+    "ASSIGNOP": {
+        "equal": "ASSIGNOP \u2192 equal"
+    },
+    "ASSIGNSTAT": {
+        "id": "ASSIGNSTAT \u2192 VARIABLE ASSIGNOP EXPR"
+    },
+    "CLASSDECL": {
+        "class": "CLASSDECL \u2192 class id OPTCLASSINHERITANCE lcurbr REPTCLASSDECL4 rcurbr semi"
+    },
+    "CLASSDECLORFUNCDEF": {
+        "function": "CLASSDECLORFUNCDEF \u2192 FUNCDEF",
+        "class": "CLASSDECLORFUNCDEF \u2192 CLASSDECL"
+    },
+    "DOTTEDIDS": {
+        "semi": "DOTTEDIDS \u2192 &epsilon",
+        "rpar": "DOTTEDIDS \u2192 &epsilon",
+        "lpar": "DOTTEDIDS \u2192 &epsilon",
+        "minus": "DOTTEDIDS \u2192 &epsilon",
+        "plus": "DOTTEDIDS \u2192 &epsilon",
+        "comma": "DOTTEDIDS \u2192 &epsilon",
+        "geq": "DOTTEDIDS \u2192 &epsilon",
+        "leq": "DOTTEDIDS \u2192 &epsilon",
+        "gt": "DOTTEDIDS \u2192 &epsilon",
+        "lt": "DOTTEDIDS \u2192 &epsilon",
+        "neq": "DOTTEDIDS \u2192 &epsilon",
+        "eq": "DOTTEDIDS \u2192 &epsilon",
+        "and": "DOTTEDIDS \u2192 &epsilon",
+        "div": "DOTTEDIDS \u2192 &epsilon",
+        "mult": "DOTTEDIDS \u2192 &epsilon",
+        "rsqbr": "DOTTEDIDS \u2192 &epsilon",
+        "lsqbr": "DOTTEDIDS \u2192 &epsilon",
+        "dot": "DOTTEDIDS \u2192 dot id DOTTEDIDS",
+        "equal": "DOTTEDIDS \u2192 &epsilon",
+        "or": "DOTTEDIDS \u2192 &epsilon"
+    },
+    "EXPR": {
+        "id": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "lpar": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "minus": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "plus": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "not": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "floatlit": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI",
+        "intlit": "EXPR \u2192 ARITHEXPR EXPRLEFTAMBI"
+    },
+    "EXPRLEFTAMBI": {
+        "semi": "EXPRLEFTAMBI \u2192 &epsilon",
+        "rpar": "EXPRLEFTAMBI \u2192 &epsilon",
+        "comma": "EXPRLEFTAMBI \u2192 &epsilon",
+        "geq": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR",
+        "leq": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR",
+        "gt": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR",
+        "lt": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR",
+        "neq": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR",
+        "eq": "EXPRLEFTAMBI \u2192 RELOP ARITHEXPR"
+    },
+    "FACTOR": {
+        "id": "FACTOR \u2192 id DOTTEDIDS FACTOROPTION",
+        "lpar": "FACTOR \u2192 lpar ARITHEXPR rpar",
+        "minus": "FACTOR \u2192 SIGN FACTOR",
+        "plus": "FACTOR \u2192 SIGN FACTOR",
+        "not": "FACTOR \u2192 not FACTOR",
+        "floatlit": "FACTOR \u2192 floatlit",
+        "intlit": "FACTOR \u2192 intlit"
+    },
+    "FACTOROPTION": {
+        "semi": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "rpar": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "lpar": "FACTOROPTION \u2192 lpar APARAMS rpar",
+        "minus": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "plus": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "comma": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "geq": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "leq": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "gt": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "lt": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "neq": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "eq": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "and": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "div": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "mult": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "rsqbr": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "lsqbr": "FACTOROPTION \u2192 REPTVARIABLE2",
+        "or": "FACTOROPTION \u2192 REPTVARIABLE2"
+    },
+    "FPARAMS": {
+        "id": "FPARAMS \u2192 id colon TYPE REPTFPARAMS3 REPTFPARAMS4",
+        "rpar": "FPARAMS \u2192 &epsilon"
+    },
+    "FPARAMSTAIL": {
+        "comma": "FPARAMSTAIL \u2192 comma id colon TYPE REPTFPARAMSTAIL4"
+    },
+    "FUNCBODY": {
+        "lcurbr": "FUNCBODY \u2192 lcurbr REPTFUNCBODY1 rcurbr"
+    },
+    "FUNCDEF": {
+        "function": "FUNCDEF \u2192 FUNCHEAD FUNCBODY"
+    },
+    "FUNCHEAD": {
+        "function": "FUNCHEAD \u2192 function id FUNCHEADOPTION"
+    },
+    "FUNCHEADOPTION": {
+        "lpar": "FUNCHEADOPTION \u2192 lpar FPARAMS rpar arrow RETURNTYPE",
+        "sr": "FUNCHEADOPTION \u2192 sr SROPTION"
+    },
+    "IDNEST": {
+        "id": "IDNEST \u2192 id IDNESTLEFTAMBI dot"
+    },
+    "IDNESTBRACKET": {
+        "id": "IDNESTBRACKET \u2192 REPTIDNEST1 id",
+        "lsqbr": "IDNESTBRACKET \u2192 REPTIDNEST1 id"
+    },
+    "IDNESTBRACKETLIST": {
+        "id": "IDNESTBRACKETLIST \u2192 IDNESTBRACKET IDNESTBRACKETLIST",
+        "lsqbr": "IDNESTBRACKETLIST \u2192 IDNESTBRACKET IDNESTBRACKETLIST"
+    },
+    "IDNESTLEFTAMBI": {
+        "lpar": "IDNESTLEFTAMBI \u2192 lpar APARAMS rpar",
+        "lsqbr": "IDNESTLEFTAMBI \u2192 REPTIDNEST1",
+        "dot": "IDNESTLEFTAMBI \u2192 REPTIDNEST1"
+    },
+    "IDNESTPAREN": {
+        "lpar": "IDNESTPAREN \u2192 lpar APARAMS rpar id"
+    },
+    "IDNESTPARENLIST": {
+        "lpar": "IDNESTPARENLIST \u2192 IDNESTPAREN IDNESTPARENLIST"
+    },
+    "INDICE": {
+        "lsqbr": "INDICE \u2192 lsqbr ARITHEXPR rsqbr"
+    },
+    "LOCALVARDECL": {
+        "localvar": "LOCALVARDECL \u2192 localvar id colon TYPE LOCALVARDECLOPTION"
+    },
+    "LOCALVARDECLOPTION": {
+        "semi": "LOCALVARDECLOPTION \u2192 REPTLOCALVARDECL4 semi",
+        "lpar": "LOCALVARDECLOPTION \u2192 lpar APARAMS rpar semi",
+        "lsqbr": "LOCALVARDECLOPTION \u2192 REPTLOCALVARDECL4 semi"
+    },
+    "LOCALVARDECLORSTMT": {
+        "id": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "return": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "write": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "read": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "while": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "if": "LOCALVARDECLORSTMT \u2192 STATEMENT",
+        "localvar": "LOCALVARDECLORSTMT \u2192 LOCALVARDECL"
+    },
+    "MEMBERDECL": {
+        "constructor": "MEMBERDECL \u2192 MEMBERFUNCDECL",
+        "attribute": "MEMBERDECL \u2192 MEMBERVARDECL",
+        "function": "MEMBERDECL \u2192 MEMBERFUNCDECL"
+    },
+    "MEMBERFUNCDECL": {
+        "constructor": "MEMBERFUNCDECL \u2192 constructor colon lpar FPARAMS rpar semi",
+        "function": "MEMBERFUNCDECL \u2192 function id colon lpar FPARAMS rpar arrow RETURNTYPE semi"
+    },
+    "MEMBERVARDECL": {
+        "attribute": "MEMBERVARDECL \u2192 attribute id colon TYPE REPTMEMBERVARDECL4 semi"
+    },
+    "MULTOP": {
+        "and": "MULTOP \u2192 and",
+        "div": "MULTOP \u2192 div",
+        "mult": "MULTOP \u2192 mult"
+    },
+    "OPTCLASSINHERITANCE": {
+        "lcurbr": "OPTCLASSINHERITANCE \u2192 &epsilon",
+        "isa": "OPTCLASSINHERITANCE \u2192 isa id REPTOPTCLASSINHERITANCE2"
+    },
+    "OPTFUNCTIONHEADCLASSMEMBER": {
+        "id": "OPTFUNCTIONHEADCLASSMEMBER \u2192 id sr"
+    },
+    "RELEXPR": {
+        "id": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "lpar": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "minus": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "plus": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "not": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "floatlit": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR",
+        "intlit": "RELEXPR \u2192 ARITHEXPR RELOP ARITHEXPR"
+    },
+    "RELOP": {
+        "geq": "RELOP \u2192 geq",
+        "leq": "RELOP \u2192 leq",
+        "gt": "RELOP \u2192 gt",
+        "lt": "RELOP \u2192 lt",
+        "neq": "RELOP \u2192 neq",
+        "eq": "RELOP \u2192 eq"
+    },
+    "REPTAPARAMS1": {
+        "rpar": "REPTAPARAMS1 \u2192 &epsilon",
+        "comma": "REPTAPARAMS1 \u2192 APARAMSTAIL REPTAPARAMS1"
+    },
+    "REPTCLASSDECL4": {
+        "private": "REPTCLASSDECL4 \u2192 VISIBILITY MEMBERDECL REPTCLASSDECL4",
+        "public": "REPTCLASSDECL4 \u2192 VISIBILITY MEMBERDECL REPTCLASSDECL4",
+        "rcurbr": "REPTCLASSDECL4 \u2192 &epsilon",
+        "constructor": "REPTCLASSDECL4 \u2192 VISIBILITY MEMBERDECL REPTCLASSDECL4",
+        "attribute": "REPTCLASSDECL4 \u2192 VISIBILITY MEMBERDECL REPTCLASSDECL4",
+        "function": "REPTCLASSDECL4 \u2192 VISIBILITY MEMBERDECL REPTCLASSDECL4"
+    },
+    "REPTFPARAMS3": {
+        "rpar": "REPTFPARAMS3 \u2192 &epsilon",
+        "comma": "REPTFPARAMS3 \u2192 &epsilon",
+        "lsqbr": "REPTFPARAMS3 \u2192 ARRAYSIZE REPTFPARAMS3"
+    },
+    "REPTFPARAMS4": {
+        "rpar": "REPTFPARAMS4 \u2192 &epsilon",
+        "comma": "REPTFPARAMS4 \u2192 FPARAMSTAIL REPTFPARAMS4"
+    },
+    "REPTFPARAMSTAIL4": {
+        "rpar": "REPTFPARAMSTAIL4 \u2192 &epsilon",
+        "comma": "REPTFPARAMSTAIL4 \u2192 &epsilon",
+        "lsqbr": "REPTFPARAMSTAIL4 \u2192 ARRAYSIZE REPTFPARAMSTAIL4"
+    },
+    "REPTFUNCBODY1": {
+        "id": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "return": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "write": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "read": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "while": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "if": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1",
+        "rcurbr": "REPTFUNCBODY1 \u2192 &epsilon",
+        "localvar": "REPTFUNCBODY1 \u2192 LOCALVARDECLORSTMT REPTFUNCBODY1"
+    },
+    "REPTFUNCTIONCALL0": {
+        "id": "REPTFUNCTIONCALL0 \u2192 IDNEST REPTFUNCTIONCALL0"
+    },
+    "REPTIDNEST1": {
+        "id": "REPTIDNEST1 \u2192 &epsilon",
+        "lsqbr": "REPTIDNEST1 \u2192 INDICE REPTIDNEST1",
+        "dot": "REPTIDNEST1 \u2192 &epsilon"
+    },
+    "REPTLOCALVARDECL4": {
+        "semi": "REPTLOCALVARDECL4 \u2192 &epsilon",
+        "lsqbr": "REPTLOCALVARDECL4 \u2192 ARRAYSIZE REPTLOCALVARDECL4"
+    },
+    "REPTMEMBERVARDECL4": {
+        "semi": "REPTMEMBERVARDECL4 \u2192 &epsilon",
+        "lsqbr": "REPTMEMBERVARDECL4 \u2192 ARRAYSIZE REPTMEMBERVARDECL4"
+    },
+    "REPTOPTCLASSINHERITANCE2": {
+        "lcurbr": "REPTOPTCLASSINHERITANCE2 \u2192 &epsilon",
+        "comma": "REPTOPTCLASSINHERITANCE2 \u2192 comma id REPTOPTCLASSINHERITANCE2"
+    },
+    "REPTSTART0": {
+        "eof": "REPTSTART0 \u2192 &epsilon",
+        "function": "REPTSTART0 \u2192 CLASSDECLORFUNCDEF REPTSTART0",
+        "class": "REPTSTART0 \u2192 CLASSDECLORFUNCDEF REPTSTART0"
+    },
+    "REPTSTATBLOCK1": {
+        "id": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "return": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "write": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "read": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "while": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "if": "REPTSTATBLOCK1 \u2192 STATEMENT REPTSTATBLOCK1",
+        "rcurbr": "REPTSTATBLOCK1 \u2192 &epsilon"
+    },
+    "REPTVARIABLE0": {
+        "id": "REPTVARIABLE0 \u2192 IDNEST REPTVARIABLE0"
+    },
+    "REPTVARIABLE2": {
+        "semi": "REPTVARIABLE2 \u2192 &epsilon",
+        "rpar": "REPTVARIABLE2 \u2192 &epsilon",
+        "minus": "REPTVARIABLE2 \u2192 &epsilon",
+        "plus": "REPTVARIABLE2 \u2192 &epsilon",
+        "comma": "REPTVARIABLE2 \u2192 &epsilon",
+        "geq": "REPTVARIABLE2 \u2192 &epsilon",
+        "leq": "REPTVARIABLE2 \u2192 &epsilon",
+        "gt": "REPTVARIABLE2 \u2192 &epsilon",
+        "lt": "REPTVARIABLE2 \u2192 &epsilon",
+        "neq": "REPTVARIABLE2 \u2192 &epsilon",
+        "eq": "REPTVARIABLE2 \u2192 &epsilon",
+        "and": "REPTVARIABLE2 \u2192 &epsilon",
+        "div": "REPTVARIABLE2 \u2192 &epsilon",
+        "mult": "REPTVARIABLE2 \u2192 &epsilon",
+        "rsqbr": "REPTVARIABLE2 \u2192 &epsilon",
+        "lsqbr": "REPTVARIABLE2 \u2192 INDICE REPTVARIABLE2",
+        "equal": "REPTVARIABLE2 \u2192 &epsilon",
+        "or": "REPTVARIABLE2 \u2192 &epsilon"
+    },
+    "RETURNTYPE": {
+        "id": "RETURNTYPE \u2192 TYPE",
+        "float": "RETURNTYPE \u2192 TYPE",
+        "integer": "RETURNTYPE \u2192 TYPE",
+        "void": "RETURNTYPE \u2192 void"
+    },
+    "RIGHTRECARITHEXPR": {
+        "semi": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "rpar": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "minus": "RIGHTRECARITHEXPR \u2192 ADDOP TERM RIGHTRECARITHEXPR",
+        "plus": "RIGHTRECARITHEXPR \u2192 ADDOP TERM RIGHTRECARITHEXPR",
+        "comma": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "geq": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "leq": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "gt": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "lt": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "neq": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "eq": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "rsqbr": "RIGHTRECARITHEXPR \u2192 &epsilon",
+        "or": "RIGHTRECARITHEXPR \u2192 ADDOP TERM RIGHTRECARITHEXPR"
+    },
+    "RIGHTRECTERM": {
+        "semi": "RIGHTRECTERM \u2192 &epsilon",
+        "rpar": "RIGHTRECTERM \u2192 &epsilon",
+        "minus": "RIGHTRECTERM \u2192 &epsilon",
+        "plus": "RIGHTRECTERM \u2192 &epsilon",
+        "comma": "RIGHTRECTERM \u2192 &epsilon",
+        "geq": "RIGHTRECTERM \u2192 &epsilon",
+        "leq": "RIGHTRECTERM \u2192 &epsilon",
+        "gt": "RIGHTRECTERM \u2192 &epsilon",
+        "lt": "RIGHTRECTERM \u2192 &epsilon",
+        "neq": "RIGHTRECTERM \u2192 &epsilon",
+        "eq": "RIGHTRECTERM \u2192 &epsilon",
+        "and": "RIGHTRECTERM \u2192 MULTOP FACTOR RIGHTRECTERM",
+        "div": "RIGHTRECTERM \u2192 MULTOP FACTOR RIGHTRECTERM",
+        "mult": "RIGHTRECTERM \u2192 MULTOP FACTOR RIGHTRECTERM",
+        "rsqbr": "RIGHTRECTERM \u2192 &epsilon",
+        "or": "RIGHTRECTERM \u2192 &epsilon"
+    },
+    "SIGN": {
+        "minus": "SIGN \u2192 minus",
+        "plus": "SIGN \u2192 plus"
+    },
+    "SROPTION": {
+        "id": "SROPTION \u2192 id lpar FPARAMS rpar arrow RETURNTYPE",
+        "constructor": "SROPTION \u2192 constructor lpar FPARAMS rpar"
+    },
+    "START": {
+        "eof": "START \u2192 REPTSTART0 eof",
+        "function": "START \u2192 REPTSTART0 eof",
+        "class": "START \u2192 REPTSTART0 eof"
+    },
+    "STATBLOCK": {
+        "id": "STATBLOCK \u2192 STATEMENT",
+        "semi": "STATBLOCK \u2192 &epsilon",
+        "return": "STATBLOCK \u2192 STATEMENT",
+        "write": "STATBLOCK \u2192 STATEMENT",
+        "read": "STATBLOCK \u2192 STATEMENT",
+        "while": "STATBLOCK \u2192 STATEMENT",
+        "else": "STATBLOCK \u2192 &epsilon",
+        "if": "STATBLOCK \u2192 STATEMENT",
+        "lcurbr": "STATBLOCK \u2192 lcurbr REPTSTATBLOCK1 rcurbr"
+    },
+    "STATEMENT": {
+        "id": "STATEMENT \u2192 id DOTTEDIDS STATEMENTOPTION",
+        "return": "STATEMENT \u2192 return lpar EXPR rpar semi",
+        "write": "STATEMENT \u2192 write lpar EXPR rpar semi",
+        "read": "STATEMENT \u2192 read lpar VARIABLE rpar semi",
+        "while": "STATEMENT \u2192 while lpar RELEXPR rpar STATBLOCK semi",
+        "if": "STATEMENT \u2192 if lpar RELEXPR rpar then STATBLOCK else STATBLOCK semi"
+    },
+    "STATEMENTOPTION": {
+        "lpar": "STATEMENTOPTION \u2192 lpar APARAMS rpar semi",
+        "lsqbr": "STATEMENTOPTION \u2192 REPTVARIABLE2 ASSIGNOP EXPR semi",
+        "equal": "STATEMENTOPTION \u2192 REPTVARIABLE2 ASSIGNOP EXPR semi"
+    },
+    "TERM": {
+        "id": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "lpar": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "minus": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "plus": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "not": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "floatlit": "TERM \u2192 FACTOR RIGHTRECTERM",
+        "intlit": "TERM \u2192 FACTOR RIGHTRECTERM"
+    },
+    "TYPE": {
+        "id": "TYPE \u2192 id",
+        "float": "TYPE \u2192 float",
+        "integer": "TYPE \u2192 integer"
+    },
+    "VARIABLE": {
+        "id": "VARIABLE \u2192 id REPTVARIABLE2"
+    },
+    "VISIBILITY": {
+        "private": "VISIBILITY \u2192 private",
+        "public": "VISIBILITY \u2192 public",
+        "constructor": "VISIBILITY \u2192 &epsilon",
+        "attribute": "VISIBILITY \u2192 &epsilon",
+        "function": "VISIBILITY \u2192 &epsilon"
+    }
+}

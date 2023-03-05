@@ -1,4 +1,5 @@
-<arithExpr> ::= <term> <add-terms> 'eof'
+<start> ::= <arithExpr> 'eof'
+<arithExpr> ::= <term> <add-terms>
 <add-terms> ::= EPSILON
 <add-terms> ::= <addOp> <arithExpr>
 

@@ -1,0 +1,24 @@
+ADDOP -> plus  . 
+ADDOP -> minus  . 
+ADDOP -> or  . 
+
+ADDTERMS ->  . 
+ADDTERMS -> ADDOP ARITHEXPR  . 
+
+ARITHEXPR -> TERM ADDTERMS  . 
+
+LITERAL -> intlit  . 
+LITERAL -> floatlit  . 
+
+MULTIPLYLITERALS -> MULTOP TERM  . 
+MULTIPLYLITERALS ->  . 
+
+MULTOP -> mult  . 
+MULTOP -> div  . 
+MULTOP -> and  . 
+
+START -> ARITHEXPR eof  . 
+
+TERM -> LITERAL MULTIPLYLITERALS  . 
+
+

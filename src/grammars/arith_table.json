@@ -1,0 +1,43 @@
+{
+    "ADDOP": {
+        "or": "ADDOP \u2192 or",
+        "minus": "ADDOP \u2192 minus",
+        "plus": "ADDOP \u2192 plus"
+    },
+    "ADDTERMS": {
+        "eof": "ADDTERMS \u2192 &epsilon",
+        "or": "ADDTERMS \u2192 ADDOP ARITHEXPR",
+        "minus": "ADDTERMS \u2192 ADDOP ARITHEXPR",
+        "plus": "ADDTERMS \u2192 ADDOP ARITHEXPR"
+    },
+    "ARITHEXPR": {
+        "floatlit": "ARITHEXPR \u2192 TERM ADDTERMS",
+        "intlit": "ARITHEXPR \u2192 TERM ADDTERMS"
+    },
+    "LITERAL": {
+        "floatlit": "LITERAL \u2192 floatlit",
+        "intlit": "LITERAL \u2192 intlit"
+    },
+    "MULTIPLYLITERALS": {
+        "eof": "MULTIPLYLITERALS \u2192 &epsilon",
+        "and": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "div": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "mult": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "or": "MULTIPLYLITERALS \u2192 &epsilon",
+        "minus": "MULTIPLYLITERALS \u2192 &epsilon",
+        "plus": "MULTIPLYLITERALS \u2192 &epsilon"
+    },
+    "MULTOP": {
+        "and": "MULTOP \u2192 and",
+        "div": "MULTOP \u2192 div",
+        "mult": "MULTOP \u2192 mult"
+    },
+    "START": {
+        "floatlit": "START \u2192 ARITHEXPR eof",
+        "intlit": "START \u2192 ARITHEXPR eof"
+    },
+    "TERM": {
+        "floatlit": "TERM \u2192 LITERAL MULTIPLYLITERALS",
+        "intlit": "TERM \u2192 LITERAL MULTIPLYLITERALS"
+    }
+}

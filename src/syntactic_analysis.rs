@@ -86,7 +86,8 @@ pub fn parser_helper(
     output_file: &File)
     -> Vec<String>
 {
-    let productions_dict = &table_dict[&curr_non_terminal];
+    let productions_dict = table_dict.get(&curr_non_terminal)
+        .unwrap_or_else(|| panic!("Not able to find non-terminal {}", &curr_non_terminal));
     let production = &productions_dict[&calgary_tokens[0]];
     let production_parts: Vec<&str> = production.split_whitespace().collect();
     assert!(production_parts.len() >= 3, "We need at least 3 elements in a production.\
@@ -148,16 +149,17 @@ pub fn get_terminal_list() -> Vec<String> {
     return terminal_list
 }
 
-pub fn get_table_dict() -> HashMap<String, HashMap<String, String>> {
-    let table_dict_string = fs::read_to_string("table_dict.json").unwrap();
-    let table_dict: HashMap<String, HashMap<String, String>> = serde_json::from_str(&table_dict_string).unwrap();
+pub fn get_table_dict(table_dict_path : &str) -> HashMap<String, HashMap<String, String>> {
+    let table_dict_string = fs::read_to_string(table_dict_path).unwrap();
+    let table_dict: HashMap<String, HashMap<String, String>> = serde_json::from_str(&table_dict_string)
+        .expect(&format!("Cannot parse json: {}", &table_dict_string));
     return table_dict
 }
 
 pub fn parse(
     table_dict: &HashMap<String, HashMap<String, String>>,
     calgary_tokens: &mut Vec<String>,
-    mut output_file: &File
+    mut output_file: &File,
 ) {
     calgary_tokens.push("eof".to_string());
     let terminal_list = get_terminal_list();
@@ -170,5 +172,6 @@ pub fn parse(
         &terminal_list,
         output_file
     );
-    output_file.write_all("\n Parsed Succesfully".as_bytes()).expect("Failed to write");
+    output_file.write_all("\n Parsed Succesfully".as_bytes())
+        .expect("Failed to write");
 }

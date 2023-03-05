@@ -1,23 +1,24 @@
 use super::lexical_analysis::*;
+use super::semantic_graph::*;
 use std::collections::HashMap;
 use super::syntactic_analysis::*;
 use std::fs::File;
 use std::io::Write;
+use dot::render;
 use serde::{Serialize, Deserialize};
 use serde::de::Unexpected::Map;
 
 #[cfg(test)]
-
 fn modifies_and_returns(mut some_string: String) -> String {
     some_string = some_string + " hello";
-    return some_string
+    return some_string;
 }
 
 #[test]
 fn test_split_a_string() {
     let string = String::from("a → X + Y");
     let split_string: Vec<&str> = string.split_whitespace().collect();
-    assert_eq!(split_string, vec!["a","→","X","+","Y"])
+    assert_eq!(split_string, vec!["a", "→", "X", "+", "Y"])
 }
 
 #[test]
@@ -59,21 +60,48 @@ fn test_reading_json() {
 
 #[test]
 fn test_read_table_dict() {
-    let table_dict = get_table_dict();
+    let table_dict = get_table_dict("src/grammars/full_table.json");
     assert_eq!(table_dict["ADDOP"].len(), 3);
     assert_eq!(table_dict["INDICE"]["lsqbr"], "INDICE \u{2192} lsqbr ARITHEXPR rsqbr");
 }
 
 #[test]
 fn test_parse() {
-    let source_file_content = read_source_file("test.src".to_string());
+    let source_file_content = read_source_file("src/syntax_tests/src/test.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
     let all_tokens = scanner.get_all_tokens();
     let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
         .map(|token| get_calgary_token(token.token_type)).collect();
-    let table_dict = get_table_dict();
-    let mut output_file = File::create("out.derivation").expect("Should have been able to create the file");
+    let table_dict = get_table_dict("src/grammars/full_table.json");
+    let mut output_file = File::create("src/syntax_tests/out/test.derivation").expect("Should have been able to create the file");
     parse(&table_dict, &mut calgary_tokens, &output_file)
+}
+
+#[test]
+fn test_arith_parse() {
+    let source_file_content = read_source_file("src/syntax_tests/src/arith.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict("src/grammars/arith_table.json");
+    let mut output_file = File::create("src/syntax_tests/out/arith.derivation").expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file)
+}
+
+#[test]
+fn test_generate_graph_file() {
+    let edges = Edges(
+        vec!(
+            ("x".to_string(), "y".to_string()),
+            ("y".to_string(), "z".to_string()),
+            ("z".to_string(), "exit".to_string()),
+            ("exit".to_string(), "end".to_string())
+        )
+    );
+    let mut file = File::create("src/test_out/test_dot_library.dot")
+        .expect("Unable to create graph file");
+    render_to(&mut file, edges)
 }
 
 #[test]
@@ -126,7 +154,7 @@ pub fn test_convert_token_to_calgary() {
         "plus",
         "id",
         "plus",
-        "id"
+        "id",
     ];
     let truth: Vec<String> = truth.into_iter().map(|s| s.to_string()).collect();
     let calgary_tokens: Vec<String> = all_tokens.into_iter()
