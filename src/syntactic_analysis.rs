@@ -160,7 +160,8 @@ pub fn parser_helper(
                         edges
                     );
                     for terminal in &derivation {
-                        assert!(terminal_list.contains(terminal))
+                        assert!(terminal_list.contains(terminal), 
+                                "derivation_terminal {} is not in terminal list.", terminal)
                     }
                     derived_parts.extend(derivation);
                 }

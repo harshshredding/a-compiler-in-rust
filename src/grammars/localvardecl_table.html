@@ -1,0 +1,81 @@
+<table class="parse_table" border="1">
+<tbody><tr><td></td><th><terminal>$</terminal></th><th><terminal>id</terminal></th><th><terminal>float</terminal></th><th><terminal>int</terminal></th><th><terminal>eof</terminal></th><th><terminal>semi</terminal></th><th><terminal>colon</terminal></th><th><terminal>localvar</terminal></th><th><terminal>rsqbr</terminal></th><th><terminal>intlit</terminal></th><th><terminal>lsqbr</terminal></th></tr>
+<tr><th><nonterm>ARRAYLIST</nonterm></th>
+<td><nonterm>ARRAYLIST</nonterm> → &amp;epsilon</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>ARRAYLIST</nonterm> → &amp;epsilon</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>ARRAYLIST</nonterm> → <nonterm>ARRAYSIZE</nonterm> <nonterm>ARRAYLIST</nonterm></td>
+</tr>
+<tr><th><nonterm>ARRAYSIZE</nonterm></th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>ARRAYSIZE</nonterm> → <term>lsqbr</term> <nonterm>ARRAYSIZPOSTFIX</nonterm></td>
+</tr>
+<tr><th><nonterm>ARRAYSIZPOSTFIX</nonterm></th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>ARRAYSIZPOSTFIX</nonterm> → <term>rsqbr</term></td>
+<td><nonterm>ARRAYSIZPOSTFIX</nonterm> → <term>intlit</term> <term>rsqbr</term></td>
+<td>&nbsp;</td>
+</tr>
+<tr><th><nonterm>LOCALVARDECL</nonterm></th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>LOCALVARDECL</nonterm> → <term>localvar</term> <term>id</term> <term>colon</term> <nonterm>TYPE</nonterm> <nonterm>ARRAYLIST</nonterm> <term>semi</term></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><th><nonterm>START</nonterm></th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td><nonterm>START</nonterm> → <nonterm>LOCALVARDECL</nonterm> <term>eof</term></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><th><nonterm>TYPE</nonterm></th>
+<td>&nbsp;</td>
+<td><nonterm>TYPE</nonterm> → <term>id</term></td>
+<td><nonterm>TYPE</nonterm> → <term>float</term></td>
+<td><nonterm>TYPE</nonterm> → <term>int</term></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody></table>
