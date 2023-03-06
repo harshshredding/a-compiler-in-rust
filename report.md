@@ -40,11 +40,12 @@ Please see `src/test_out` directory for several dot file outputs and correspondi
 
 ## AST Output for test cases
 Test source files are in `src/syntax_tests/src` and the corresponding ASTs(`dot` files and `svg` files) are in `src/test_out`.
+`src/test_out/program_with_assignments.svg` is a good example of the capability of my parser.
 
 ## Driver
 First run `cargo build` in root directory.
 
 Place any source you want to test in `src/syntax_tests/src/custom_test.src`.
 
-Then run `cargo test` in terminal, which will create AST output and derivation at `src/test_out/custom_test.dot` 
-and `src/syntax_tests/out/custom_test.derivation` respectively.
+Then run `cargo test` in terminal, which will create AST output and derivation at `src/test_out/custom_test.svg`
+and `src/syntax_tests/out/custom_test.derivation` respectively. Also, the corresponding dot file is at `src/test_out/custom_test.dot`.
