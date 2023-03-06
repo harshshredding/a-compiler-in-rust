@@ -172,6 +172,29 @@ impl SemanticAction for FunctionGather {
 }
 
 
+pub struct FunctionGatherFull;
+
+impl SemanticAction for FunctionGatherFull {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<Edge>
+    ) {
+        assert!(semantic_stack.len() >= 3,
+                "The semantic stack doesn't have enough nodes Stack {:?}", semantic_stack);
+        let assign_statement_list_node = semantic_stack.pop().unwrap();
+        let local_var_decl_list_node = semantic_stack.pop().unwrap();
+        let id_node = semantic_stack.pop().unwrap();
+        let function_node = SemanticNode::new(all_semantic_nodes, "Function".into());
+        edges.push((function_node.as_string(), id_node.as_string()));
+        edges.push((function_node.as_string(), local_var_decl_list_node.as_string()));
+        edges.push((function_node.as_string(), assign_statement_list_node.as_string()));
+        semantic_stack.push(function_node);
+    }
+}
+
+
 pub struct ProgramGather;
 
 impl SemanticAction for ProgramGather {
@@ -187,6 +210,27 @@ impl SemanticAction for ProgramGather {
         let program_node = SemanticNode::new(all_semantic_nodes, "Program".into());
         edges.push((program_node.as_string(), function_list_node.as_string()));
         semantic_stack.push(program_node);
+    }
+}
+
+
+pub struct AssignStatementGather;
+
+impl SemanticAction for AssignStatementGather {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<Edge>
+    ) {
+        assert!(semantic_stack.len() >= 2,
+                "The semantic stack doesn't have enough elements. Stack {:?}", semantic_stack);
+        let righthand_side = semantic_stack.pop().unwrap();
+        let left_hand_side = semantic_stack.pop().unwrap();
+        let assign_statement_node = SemanticNode::new(all_semantic_nodes, "AssignStatement".into());
+        edges.push((assign_statement_node.as_string(), left_hand_side.as_string()));
+        edges.push((assign_statement_node.as_string(), righthand_side.as_string()));
+        semantic_stack.push(assign_statement_node);
     }
 }
 
@@ -476,6 +520,52 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
             return get_only_syntax_elements(production_string)
         }
         "LISTFUNCTIONS → FUNCDEF LISTFUNCTIONS" =>  {
+            return get_only_syntax_elements(production_string)
+        }
+        "LISTASSIGNSTATEMENTS → ASSIGNSTAT LISTASSIGNSTATEMENTS" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "LISTASSIGNSTATEMENTS → &epsilon" =>  {
+            return get_only_syntax_elements(production_string)
+        }
+        "FUNCDEF → function id lpar rpar lcurbr LISTLOCALVARDECL LISTASSIGNSTATEMENTS rcurbr" => {
+            return vec![
+                SyntaxElement("function".into()),
+                SyntaxElement("id".into()),
+                SemanticElement(Box::new(StoreValue{value: "Identifier".to_string()})),
+                SyntaxElement("lpar".to_string()),
+                SyntaxElement("rpar".to_string()),
+                SyntaxElement("lcurbr".to_string()),
+
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTLOCALVARDECL".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "LocalVarDeclList".into()})),
+
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTASSIGNSTATEMENTS".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "AssignStatList".into()})),
+
+                SyntaxElement("rcurbr".to_string()),
+                SemanticElement(Box::new(FunctionGatherFull))
+            ];
+        }
+        "ASSIGNSTAT → id equal ASSIGNEDVALUE semi" => {
+            return vec![
+                SyntaxElement("id".into()),
+                SemanticElement(Box::new(StoreValue{value: "leftHandIdentifier".to_string()})),
+                SyntaxElement("equal".to_string()),
+                SyntaxElement("ASSIGNEDVALUE".to_string()),
+                SyntaxElement("semi".to_string()),
+                SemanticElement(Box::new(AssignStatementGather))
+            ];
+        }
+        "ASSIGNEDVALUE → id" => {
+            return vec![
+                SemanticElement(Box::new(StoreValue{value: "RightHandIdentifier".to_string()})),
+                SyntaxElement("id".into()),
+            ];
+        }
+        "ASSIGNEDVALUE → ARITHEXPR" =>  {
             return get_only_syntax_elements(production_string)
         }
         _ => panic!("Can't add semantics to ({}) at the moment", production_string.as_str())

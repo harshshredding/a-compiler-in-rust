@@ -1,0 +1,10 @@
+function main() {
+  localvar n    : integer[1][][];
+  x = y;
+  x = 1*2+3;
+}
+
+function another_function() {
+  x = 3;
+  y = 4;
+}

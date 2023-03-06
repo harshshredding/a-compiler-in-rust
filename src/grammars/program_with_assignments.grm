@@ -18,7 +18,7 @@
 <listAssignStatements> ::= <assignStat> <listAssignStatements>
 <listAssignStatements> ::= EPSILON
 
-<assignStat> ::= 'id' '=' <assignedValue>
+<assignStat> ::= 'id' '=' <assignedValue> ';'
 <assignedValue> ::= 'id'
 <assignedValue> ::= <arithExpr>
 

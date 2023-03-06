@@ -17,7 +17,7 @@
 <arraysizpostfix> ::= 'intLit' ']' 
 <arraysizpostfix> ::= ']' 
 
-<assignStat> ::= 'id' '=' <assignedValue> 
+<assignStat> ::= 'id' '=' <assignedValue> ';' 
 
 <assignedValue> ::= 'id' 
 <assignedValue> ::= <arithExpr> 

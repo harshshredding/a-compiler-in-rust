@@ -1,0 +1,90 @@
+{
+    "ADDOP": {
+        "or": "ADDOP \u2192 or",
+        "minus": "ADDOP \u2192 minus",
+        "plus": "ADDOP \u2192 plus"
+    },
+    "ADDTERMS": {
+        "semi": "ADDTERMS \u2192 &epsilon",
+        "or": "ADDTERMS \u2192 ADDOP ARITHEXPR",
+        "minus": "ADDTERMS \u2192 ADDOP ARITHEXPR",
+        "plus": "ADDTERMS \u2192 ADDOP ARITHEXPR"
+    },
+    "ARITHEXPR": {
+        "floatlit": "ARITHEXPR \u2192 TERM ADDTERMS",
+        "intlit": "ARITHEXPR \u2192 TERM ADDTERMS"
+    },
+    "ARRAYLIST": {
+        "semi": "ARRAYLIST \u2192 &epsilon",
+        "lsqbr": "ARRAYLIST \u2192 ARRAYSIZE ARRAYLIST"
+    },
+    "ARRAYSIZE": {
+        "lsqbr": "ARRAYSIZE \u2192 lsqbr ARRAYSIZPOSTFIX"
+    },
+    "ARRAYSIZPOSTFIX": {
+        "intlit": "ARRAYSIZPOSTFIX \u2192 intlit rsqbr",
+        "rsqbr": "ARRAYSIZPOSTFIX \u2192 rsqbr"
+    },
+    "ASSIGNEDVALUE": {
+        "id": "ASSIGNEDVALUE \u2192 id",
+        "floatlit": "ASSIGNEDVALUE \u2192 ARITHEXPR",
+        "intlit": "ASSIGNEDVALUE \u2192 ARITHEXPR"
+    },
+    "ASSIGNSTAT": {
+        "id": "ASSIGNSTAT \u2192 id equal ASSIGNEDVALUE semi"
+    },
+    "FUNCDEF": {
+        "function": "FUNCDEF \u2192 function id lpar rpar lcurbr LISTLOCALVARDECL LISTASSIGNSTATEMENTS rcurbr"
+    },
+    "LISTASSIGNSTATEMENTS": {
+        "id": "LISTASSIGNSTATEMENTS \u2192 ASSIGNSTAT LISTASSIGNSTATEMENTS",
+        "rcurbr": "LISTASSIGNSTATEMENTS \u2192 &epsilon"
+    },
+    "LISTFUNCTIONS": {
+        "eof": "LISTFUNCTIONS \u2192 &epsilon",
+        "function": "LISTFUNCTIONS \u2192 FUNCDEF LISTFUNCTIONS"
+    },
+    "LISTLOCALVARDECL": {
+        "id": "LISTLOCALVARDECL \u2192 &epsilon",
+        "localvar": "LISTLOCALVARDECL \u2192 LOCALVARDECL LISTLOCALVARDECL",
+        "rcurbr": "LISTLOCALVARDECL \u2192 &epsilon"
+    },
+    "LITERAL": {
+        "floatlit": "LITERAL \u2192 floatlit",
+        "intlit": "LITERAL \u2192 intlit"
+    },
+    "LOCALVARDECL": {
+        "localvar": "LOCALVARDECL \u2192 localvar id colon TYPE ARRAYLIST semi"
+    },
+    "MULTIPLYLITERALS": {
+        "and": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "div": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "mult": "MULTIPLYLITERALS \u2192 MULTOP TERM",
+        "semi": "MULTIPLYLITERALS \u2192 &epsilon",
+        "or": "MULTIPLYLITERALS \u2192 &epsilon",
+        "minus": "MULTIPLYLITERALS \u2192 &epsilon",
+        "plus": "MULTIPLYLITERALS \u2192 &epsilon"
+    },
+    "MULTOP": {
+        "and": "MULTOP \u2192 and",
+        "div": "MULTOP \u2192 div",
+        "mult": "MULTOP \u2192 mult"
+    },
+    "PROGRAM": {
+        "eof": "PROGRAM \u2192 LISTFUNCTIONS",
+        "function": "PROGRAM \u2192 LISTFUNCTIONS"
+    },
+    "START": {
+        "eof": "START \u2192 PROGRAM eof",
+        "function": "START \u2192 PROGRAM eof"
+    },
+    "TERM": {
+        "floatlit": "TERM \u2192 LITERAL MULTIPLYLITERALS",
+        "intlit": "TERM \u2192 LITERAL MULTIPLYLITERALS"
+    },
+    "TYPE": {
+        "id": "TYPE \u2192 id",
+        "float": "TYPE \u2192 float",
+        "integer": "TYPE \u2192 integer"
+    }
+}
