@@ -1,0 +1,43 @@
+<start> ::= <Program> 'eof' @CheckStackOneNode
+<Program> ::= @MarkBeginList <listfunctions> @CollectList
+<listfunctions> ::= <funcDef> <listfunctions>
+<listfunctions> ::= EPSILON
+<funcDef> ::= 'function' @PushIdentifier 'id' '(' ')' '{' @MarkBeginList <listlocalvardecl> @CollectList @MarkBeginList <listAssignStatements> @CollectList'}'
+<listlocalvardecl> ::= <localvardecl> <listlocalvardecl>
+<listlocalvardecl> ::= EPSILON
+<localvardecl> ::= 'localVar' @PushIdentifier 'id' ':' <type> @MarkBeginList <arraylist> @CollectList ';' @GatherLocalVariableDeclaration
+<type> ::= @PushIntegerType 'integer'
+<type> ::= @PushFloatType 'float'
+<type> ::= @PushIdentifierType 'id'
+<arraylist> ::= <arraysize> <arraylist>
+<arraylist> ::= EPSILON
+<arraysize> ::= '[' <arraysizpostfix>
+<arraysizpostfix> ::= @PushIntSize 'intLit' ']'
+<arraysizpostfix> ::= @PushEmptySize ']'
+
+<listAssignStatements> ::= <assignStat> <listAssignStatements>
+<listAssignStatements> ::= EPSILON
+
+<assignStat> ::= @PushIdentifier 'id' '=' <assignedValue> ';' @GatherAssignStatement
+<assignedValue> ::= @PushRightHandIdentifier 'id'
+<assignedValue> ::= <arithExpr>
+
+
+<arithExpr> ::= <term> <add-terms>
+<add-terms> ::= EPSILON
+<add-terms> ::= <addOp> <arithExpr> @GatherAdd
+
+<term> ::= <literal> <multiply-literals>
+<multiply-literals> ::= <multOp> <term> @GatherMult
+<multiply-literals> ::= EPSILON
+
+<literal> ::= @PushInt 'intLit'
+<literal> ::= @PushFloat 'floatLit'
+
+<multOp> ::= @PushMult '*'
+<multOp> ::= @PushDiv '/'
+<multOp> ::= @PushAndOp 'and'
+
+<addOp> ::= @PushPlus '+'
+<addOp> ::= @PushMinus '-'
+<addOp> ::= @PushOr 'or'
