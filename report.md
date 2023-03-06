@@ -42,7 +42,9 @@ Please see `src/test_out` directory for several dot file outputs and correspondi
 Test source files are in `src/syntax_tests/src` and the corresponding ASTs(`dot` files and `svg` files) are in `src/test_out`.
 
 ## Driver
+First run `cargo build` in root directory.
+
 Place any source you want to test in `src/syntax_tests/src/custom_test.src`.
 
-Then run `cargo test` in terminal. The AST output and the derivation will be in `src/test_out/custom_test.dot` 
+Then run `cargo test` in terminal, which will create AST output and derivation at `src/test_out/custom_test.dot` 
 and `src/syntax_tests/out/custom_test.derivation` respectively.
