@@ -95,7 +95,7 @@ pub fn parser_helper(
     let productions_dict = table_dict.get(&curr_non_terminal)
         .unwrap_or_else(|| panic!("Not able to find non-terminal {}", &curr_non_terminal));
     let production = &productions_dict.get(&calgary_tokens[0])
-        .expect(&format!("token not found in dict: {}", &calgary_tokens[0]));
+        .expect(&format!("token not found in dict: {}, curr_non_terminal {}", &calgary_tokens[0], curr_non_terminal));
     let production_parts: Vec<&str> = production.split_whitespace().collect();
     assert!(production_parts.len() >= 3, "We need at least 3 elements in a production.\
                                           Production {}", production.as_str());

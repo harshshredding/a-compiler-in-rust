@@ -1,4 +1,7 @@
-<start> ::= <funcDef> 'eof'
+<start> ::= <Program> 'eof'
+<Program> ::= <listfunctions>
+<listfunctions> ::= <funcDef> <listfunctions>
+<listfunctions> ::= EPSILON
 <funcDef> ::= 'function' 'id' '(' ')' '{' <listlocalvardecl> '}'
 <listlocalvardecl> ::= <localvardecl> <listlocalvardecl>
 <listlocalvardecl> ::= EPSILON

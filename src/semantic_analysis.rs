@@ -151,6 +151,27 @@ impl SemanticAction for LocalVarGather {
 }
 
 
+pub struct FunctionGather;
+
+impl SemanticAction for FunctionGather {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<Edge>
+    ) {
+        assert!(semantic_stack.len() >= 2,
+                "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
+        let local_var_decl_list_node = semantic_stack.pop().unwrap();
+        let id_node = semantic_stack.pop().unwrap();
+        let function_node = SemanticNode::new(all_semantic_nodes, "Function".into());
+        edges.push((function_node.as_string(), id_node.as_string()));
+        edges.push((function_node.as_string(), local_var_decl_list_node.as_string()));
+        semantic_stack.push(function_node);
+    }
+}
+
+
 pub struct MultGather;
 
 impl SemanticAction for MultGather {
@@ -387,6 +408,34 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
             return get_only_syntax_elements(production_string)
         }
         "ARRAYSIZE → lsqbr ARRAYSIZPOSTFIX" => {
+            return get_only_syntax_elements(production_string)
+        },
+        "FUNCDEF → function id lpar rpar lcurbr LISTLOCALVARDECL rcurbr" => {
+            return vec![
+                SyntaxElement("function".into()),
+                SyntaxElement("id".into()),
+                SemanticElement(Box::new(StoreValue{value: "Identifier".to_string()})),
+                SyntaxElement("lpar".to_string()),
+                SyntaxElement("rpar".to_string()),
+                SyntaxElement("lcurbr".to_string()),
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTLOCALVARDECL".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "LocalVarDeclList".into()})),
+                SyntaxElement("rcurbr".to_string()),
+                SemanticElement(Box::new(FunctionGather))
+            ];
+        }
+        "START → FUNCDEF eof" => {
+            return vec![
+                SyntaxElement("FUNCDEF".to_string()),
+                SyntaxElement("eof".to_string()),
+                SemanticElement(Box::new(CheckStackOneNode)),
+            ];
+        }
+        "LISTLOCALVARDECL → LOCALVARDECL LISTLOCALVARDECL" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "LISTLOCALVARDECL → &epsilon" =>  {
             return get_only_syntax_elements(production_string)
         }
         _ => panic!("Can't add semantics to ({}) at the moment", production_string.as_str())

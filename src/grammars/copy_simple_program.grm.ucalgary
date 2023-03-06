@@ -8,12 +8,17 @@ ARRAYSIZPOSTFIX -> rsqbr  .
 
 FUNCDEF -> function id lpar rpar lcurbr LISTLOCALVARDECL rcurbr  . 
 
+LISTFUNCTIONS -> FUNCDEF LISTFUNCTIONS  . 
+LISTFUNCTIONS ->  . 
+
 LISTLOCALVARDECL -> LOCALVARDECL LISTLOCALVARDECL  . 
 LISTLOCALVARDECL ->  . 
 
 LOCALVARDECL -> localvar id colon TYPE ARRAYLIST semi  . 
 
-START -> FUNCDEF eof  . 
+PROGRAM -> LISTFUNCTIONS  . 
+
+START -> PROGRAM eof  . 
 
 TYPE -> integer  . 
 TYPE -> float  . 

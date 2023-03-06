@@ -1,3 +1,5 @@
+<Program> ::= <listfunctions> 
+
 <arraylist> ::= <arraysize> <arraylist> 
 <arraylist> ::= EPSILON 
 
@@ -8,12 +10,15 @@
 
 <funcDef> ::= 'function' 'id' '(' ')' '{' <listlocalvardecl> '}' 
 
+<listfunctions> ::= <funcDef> <listfunctions> 
+<listfunctions> ::= EPSILON 
+
 <listlocalvardecl> ::= <localvardecl> <listlocalvardecl> 
 <listlocalvardecl> ::= EPSILON 
 
 <localvardecl> ::= 'localVar' 'id' ':' <type> <arraylist> ';' 
 
-<start> ::= <funcDef> 'eof' 
+<start> ::= <Program> 'eof' 
 
 <type> ::= 'integer' 
 <type> ::= 'float' 
