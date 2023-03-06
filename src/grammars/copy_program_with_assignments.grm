@@ -1,0 +1,56 @@
+<Program> ::= <listfunctions> 
+
+<add-terms> ::= EPSILON 
+<add-terms> ::= <addOp> <arithExpr> 
+
+<addOp> ::= '+' 
+<addOp> ::= '-' 
+<addOp> ::= 'or' 
+
+<arithExpr> ::= <term> <add-terms> 
+
+<arraylist> ::= <arraysize> <arraylist> 
+<arraylist> ::= EPSILON 
+
+<arraysize> ::= '[' <arraysizpostfix> 
+
+<arraysizpostfix> ::= 'intLit' ']' 
+<arraysizpostfix> ::= ']' 
+
+<assignStat> ::= 'id' '=' <assignedValue> 
+
+<assignedValue> ::= 'id' 
+<assignedValue> ::= <arithExpr> 
+
+<funcDef> ::= 'function' 'id' '(' ')' '{' <listlocalvardecl> <listAssignStatements> '}' 
+
+<listAssignStatements> ::= <assignStat> <listAssignStatements> 
+<listAssignStatements> ::= EPSILON 
+
+<listfunctions> ::= <funcDef> <listfunctions> 
+<listfunctions> ::= EPSILON 
+
+<listlocalvardecl> ::= <localvardecl> <listlocalvardecl> 
+<listlocalvardecl> ::= EPSILON 
+
+<literal> ::= 'intLit' 
+<literal> ::= 'floatLit' 
+
+<localvardecl> ::= 'localVar' 'id' ':' <type> <arraylist> ';' 
+
+<multOp> ::= '*' 
+<multOp> ::= '/' 
+<multOp> ::= 'and' 
+
+<multiply-literals> ::= <multOp> <term> 
+<multiply-literals> ::= EPSILON 
+
+<start> ::= <Program> 'eof' 
+
+<term> ::= <literal> <multiply-literals> 
+
+<type> ::= 'integer' 
+<type> ::= 'float' 
+<type> ::= 'id' 
+
+

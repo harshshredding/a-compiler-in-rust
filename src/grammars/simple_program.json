@@ -1,0 +1,41 @@
+{
+    "ARRAYLIST": {
+        "$": "ARRAYLIST \u2192 &epsilon",
+        "semi": "ARRAYLIST \u2192 &epsilon",
+        "lsqbr": "ARRAYLIST \u2192 ARRAYSIZE ARRAYLIST"
+    },
+    "ARRAYSIZE": {
+        "lsqbr": "ARRAYSIZE \u2192 lsqbr ARRAYSIZPOSTFIX"
+    },
+    "ARRAYSIZPOSTFIX": {
+        "rsqbr": "ARRAYSIZPOSTFIX \u2192 rsqbr",
+        "intlit": "ARRAYSIZPOSTFIX \u2192 intlit rsqbr"
+    },
+    "FUNCDEF": {
+        "function": "FUNCDEF \u2192 function id lpar rpar lcurbr LISTLOCALVARDECL rcurbr"
+    },
+    "LISTFUNCTIONS": {
+        "eof": "LISTFUNCTIONS \u2192 &epsilon",
+        "function": "LISTFUNCTIONS \u2192 FUNCDEF LISTFUNCTIONS"
+    },
+    "LISTLOCALVARDECL": {
+        "localvar": "LISTLOCALVARDECL \u2192 LOCALVARDECL LISTLOCALVARDECL",
+        "rcurbr": "LISTLOCALVARDECL \u2192 &epsilon"
+    },
+    "LOCALVARDECL": {
+        "localvar": "LOCALVARDECL \u2192 localvar id colon TYPE ARRAYLIST semi"
+    },
+    "PROGRAM": {
+        "eof": "PROGRAM \u2192 LISTFUNCTIONS",
+        "function": "PROGRAM \u2192 LISTFUNCTIONS"
+    },
+    "START": {
+        "eof": "START \u2192 PROGRAM eof",
+        "function": "START \u2192 PROGRAM eof"
+    },
+    "TYPE": {
+        "id": "TYPE \u2192 id",
+        "float": "TYPE \u2192 float",
+        "integer": "TYPE \u2192 integer"
+    }
+}

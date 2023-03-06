@@ -172,6 +172,25 @@ impl SemanticAction for FunctionGather {
 }
 
 
+pub struct ProgramGather;
+
+impl SemanticAction for ProgramGather {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<Edge>
+    ) {
+        assert!(semantic_stack.len() >= 1,
+                "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
+        let function_list_node = semantic_stack.pop().unwrap();
+        let program_node = SemanticNode::new(all_semantic_nodes, "Program".into());
+        edges.push((program_node.as_string(), function_list_node.as_string()));
+        semantic_stack.push(program_node);
+    }
+}
+
+
 pub struct MultGather;
 
 impl SemanticAction for MultGather {
@@ -436,6 +455,27 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
             return get_only_syntax_elements(production_string)
         }
         "LISTLOCALVARDECL → &epsilon" =>  {
+            return get_only_syntax_elements(production_string)
+        }
+        "PROGRAM → LISTFUNCTIONS" => {
+            return vec![
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTFUNCTIONS".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "FunctionList".into()})),
+                SemanticElement(Box::new(ProgramGather))
+            ];
+        },
+        "START → PROGRAM eof" => {
+            return vec![
+                SyntaxElement("PROGRAM".to_string()),
+                SyntaxElement("eof".to_string()),
+                SemanticElement(Box::new(CheckStackOneNode)),
+            ];
+        },
+        "LISTFUNCTIONS → &epsilon" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "LISTFUNCTIONS → FUNCDEF LISTFUNCTIONS" =>  {
             return get_only_syntax_elements(production_string)
         }
         _ => panic!("Can't add semantics to ({}) at the moment", production_string.as_str())

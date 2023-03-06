@@ -131,6 +131,20 @@ fn test_simple_function_parse() {
     parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/function_simple.dot")
 }
 
+
+#[test]
+fn test_simple_program_parse() {
+    let source_file_content = read_source_file("src/syntax_tests/src/simple_program.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict("src/grammars/simple_program.json");
+    let output_file = File::create("src/syntax_tests/out/simple_program.derivation")
+        .expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/simple_program.dot")
+}
+
 #[test]
 fn test_generate_graph_file() {
     let edges = Edges(

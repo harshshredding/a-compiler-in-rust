@@ -1,0 +1,12 @@
+function main() {
+  localvar n    : integer[1][][];
+}
+
+function f2() {
+  localvar n    : integer[1][][];
+}
+
+function f3() {
+  localvar n    : integer[1][][];
+  localvar n    : integer[1][2][3];
+}
