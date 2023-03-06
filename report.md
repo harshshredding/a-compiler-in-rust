@@ -25,8 +25,8 @@ Each of these semantic actions trigger a piece of code which modifies the semant
 
 
 I grew the semantic grammar organically (starting from a small grammar subset and then adding more complexity) while testing it.
-Currently, the grammar can represent:
-- Arithmetic Experssions
+Currently, the grammar can accurately represent:
+- Arithmetic Expressions
 - Function Implementations
 - Assignment Statements
 - Local Variable Declarations 
@@ -35,4 +35,14 @@ Please see `src/test_out` directory for several dot file outputs and correspondi
 
 ### Use Of Tools
 - **University Of Calgary Website**:  For generations of LL(1) parsing tables for my table driven parser.
+- **GraphViz**: Visualizing my trees.
 - **Rust Lang**: The tokenizer, syntax analyzer, and semantic analyzer has been implemented in Rust.
+
+## AST Output for test cases
+Test source files are in `src/syntax_tests/src` and the corresponding ASTs(`dot` files and `svg` files) are in `src/test_out`.
+
+## Driver
+Place any source you want to test in `src/syntax_tests/src/custom_test.src`.
+
+Then run `cargo test` in terminal. The AST output and the derivation will be in `src/test_out/custom_test.dot` 
+and `src/syntax_tests/out/custom_test.derivation` respectively.

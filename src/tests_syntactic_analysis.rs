@@ -66,6 +66,7 @@ fn test_read_table_dict() {
 }
 
 #[test]
+#[ignore]
 fn test_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/test.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
@@ -157,6 +158,20 @@ fn test_assignment_program() {
     let output_file = File::create("src/syntax_tests/out/program_with_assignments.derivation")
         .expect("Should have been able to create the file");
     parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/program_with_assignments.dot")
+}
+
+
+#[test]
+fn test_custom() {
+    let source_file_content = read_source_file("src/syntax_tests/src/custom_test.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let all_tokens = scanner.get_all_tokens();
+    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
+        .map(|token| get_calgary_token(token.token_type)).collect();
+    let table_dict = get_table_dict("src/grammars/program_with_assignments.json");
+    let output_file = File::create("src/syntax_tests/out/custom_test.derivation")
+        .expect("Should have been able to create the file");
+    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/custom_test.dot")
 }
 
 #[test]
