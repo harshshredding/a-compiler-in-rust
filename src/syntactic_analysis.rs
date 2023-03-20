@@ -1,59 +1,11 @@
 use std::collections::HashMap;
 use crate::lexical_analysis::Token;
 use super::lexical_analysis::TokenType;
-use super::lexical_analysis::Scanner;
 use super::semantic_graph::*;
 use super::semantic_analysis::*;
 use std::fs::File;
 use std::{fs, io};
 use std::io::{BufRead, Write};
-
-pub fn get_calgary_token(token: TokenType) -> String {
-    match token {
-        TokenType::Function => String::from("function"),
-        TokenType::Identifier => String::from("id"),
-        TokenType::OpenParenthesis => String::from("lpar"),
-        TokenType::CloseParenthesis => String::from("rpar"),
-        TokenType::Colon => String::from("colon"),
-        TokenType::IntegerKeyword => String::from("integer"),
-        TokenType::OpenSquareBracket => String::from("lsqbr"),
-        TokenType::CloseSquareBracket => String::from("rsqbr"),
-        TokenType::Comma => String::from("comma"),
-        TokenType::LocalVar => String::from("localvar"),
-        TokenType::SemiColon => String::from("semi"),
-        TokenType::Arrow => String::from("arrow"),
-        TokenType::Void => String::from("void"),
-        TokenType::OpenCurly => String::from("lcurbr"),
-        TokenType::CloseCurly => String::from("rcurbr"),
-        TokenType::EqualsSymbol => String::from("equal"),
-        TokenType::IntLit => String::from("intlit"),
-        TokenType::While => String::from("while"),
-        TokenType::LessThan => String::from("lt"),
-        TokenType::GreaterThan => String::from("gt"),
-        TokenType::Minus => String::from("minus"),
-        TokenType::If => String::from("if"),
-        TokenType::Plus => String::from("plus"),
-        TokenType::Then => String::from("then"),
-        TokenType::Else => String::from("else"),
-        TokenType::Write => String::from("write"),
-        TokenType::Read => String::from("read"),
-        TokenType::Class => String::from("class"),
-        TokenType::Public => String::from("public"),
-        TokenType::Private => String::from("private"),
-        TokenType::FloatKeyword => String::from("float"),
-        TokenType::IsA => String::from("isa"),
-        TokenType::Attribute => String::from("attribute"),
-        TokenType::Constructor => String::from("constructor"),
-        TokenType::Sr => String::from("sr"),
-        TokenType::Return => String::from("return"),
-        TokenType::Asterix => String::from("mult"),
-        TokenType::Period => String::from("dot"),
-        TokenType::FloatLit => String::from("floatlit"),
-        TokenType::LessThanOrEq => String::from("leq"),
-        TokenType::GreaterThanOrEq => String::from("geq"),
-        _ => panic!("This token type has not been mapped")
-    }
-}
 
 
 pub fn write_production(
@@ -80,7 +32,7 @@ pub fn write_production(
 
 pub fn parser_helper(
     table_dict: &HashMap<String, HashMap<String, String>>,
-    calgary_tokens: &mut Vec<String>,
+    tokens: &mut Vec<Token>,
     curr_non_terminal: String,
     head: Vec<String>,
     tail: Vec<String>,
@@ -88,14 +40,14 @@ pub fn parser_helper(
     output_file: &File,
     semantic_stack: &mut Vec<SemanticNode>,
     all_semantic_nodes: &mut Vec<SemanticNode>,
-    edges: &mut Vec<Edge>
+    edges: &mut Vec<(SemanticNode, SemanticNode)>,
 )
     -> Vec<String>
 {
     let productions_dict = table_dict.get(&curr_non_terminal)
         .unwrap_or_else(|| panic!("Not able to find non-terminal {}", &curr_non_terminal));
-    let production = &productions_dict.get(&calgary_tokens[0])
-        .expect(&format!("token not found in dict: {}, curr_non_terminal {}", &calgary_tokens[0], curr_non_terminal));
+    let production = &productions_dict.get(&tokens[0].to_calgary())
+        .expect(&format!("token not found in dict: {}, curr_non_terminal {}", &tokens[0].to_calgary(), curr_non_terminal));
     let production_parts: Vec<&str> = production.split_whitespace().collect();
     assert!(production_parts.len() >= 3, "We need at least 3 elements in a production.\
                                           Production {}", production.as_str());
@@ -123,7 +75,7 @@ pub fn parser_helper(
         assert!(semantic_stack.len() <= all_semantic_nodes.len());
         match production_element_obj {
             ProductionElement::SemanticElement(handler) =>  {
-                handler.take_action(semantic_stack, all_semantic_nodes, edges)
+                handler.take_action(semantic_stack, all_semantic_nodes, edges, tokens.get(0))
             }
             ProductionElement::SyntaxElement(syntax_element) =>  {
                 write_production(
@@ -137,8 +89,8 @@ pub fn parser_helper(
                 if syntax_element.chars().all(char::is_lowercase) || (syntax_element == "&epsilon") {
                     // we found a terminal
                     if syntax_element != "&epsilon" {
-                        assert_eq!(syntax_element, calgary_tokens[0]);
-                        calgary_tokens.remove(0);
+                        assert_eq!(syntax_element, tokens[0].to_calgary());
+                        tokens.remove(0);
                         derived_parts.push(syntax_element);
                     }
                 } else {
@@ -150,7 +102,7 @@ pub fn parser_helper(
                     new_tail.extend(tail.clone());
                     let derivation = parser_helper(
                         table_dict,
-                        calgary_tokens,
+                        tokens,
                         syntax_element,
                         new_head,
                         new_tail,
@@ -193,18 +145,18 @@ pub fn get_table_dict(table_dict_path : &str) -> HashMap<String, HashMap<String,
 
 pub fn parse(
     table_dict: &HashMap<String, HashMap<String, String>>,
-    calgary_tokens: &mut Vec<String>,
+    tokens: &mut Vec<Token>,
     mut output_file: &File,
     output_graph_path: &str
 ) {
-    calgary_tokens.push("eof".to_string());
+    tokens.push(Token { token_type: TokenType::EndOfFile, lexeme: "eof".to_string() });
     let terminal_list = get_terminal_list();
     let mut semantic_stack: Vec<SemanticNode> = vec![];
     let mut all_semantic_nodes: Vec<SemanticNode> = vec![];
-    let mut edges: Vec<Edge> = vec![];
+    let mut edges: Vec<(SemanticNode, SemanticNode)> = vec![];
     parser_helper(
         table_dict,
-        calgary_tokens,
+        tokens,
         "START".to_string(),
         vec![],
         vec![],
@@ -218,5 +170,6 @@ pub fn parse(
         .expect("Failed to write");
     let mut file = File::create(output_graph_path)
         .expect("Unable to create graph file");
-    render_to(&mut file, Edges(edges))
+    let edges_as_strings: Vec<(String, String)> = edges.iter().map(|e| (e.0.as_string(), e.1.as_string())).collect();
+    render_to(&mut file, Edges(edges_as_strings))
 }

@@ -1,31 +1,71 @@
-use crate::lexical_analysis::TokenType::Plus;
+use crate::lexical_analysis::Token;
+use crate::lexical_analysis::TokenType;
 use crate::semantic_analysis::ProductionElement::{SemanticElement, SyntaxElement};
 use super::semantic_graph::Edge;
 
 #[derive(Clone, Debug)]
-pub struct SemanticNode {
-    pub id: usize,
-    pub val: String,
+pub enum SemanticNode {
+    Identifier{id: usize, symbol: String},
+    Type{id: usize, type_string: String},
+    ArraySize{id: usize, size: usize},
+    HigherLevelNode{id: usize, description: String},
+    Marker{id: usize}
 }
 
 impl SemanticNode {
     pub fn as_string(&self) -> String {
-        return format!("{}{}", self.val, self.id);
-    }
-    pub fn new(all_semantic_nodes: &Vec<SemanticNode>, node_value: String) -> SemanticNode {
-        SemanticNode {
-            id: all_semantic_nodes.len(),
-            val: node_value,
+        match self {
+            SemanticNode::Identifier { id, symbol } => {
+                return format!("Id_{}_ID{}", symbol, id);
+            }
+            SemanticNode::Type { id, type_string } => {
+                return format!("Type_{}_ID{}", type_string, id);
+            }
+            SemanticNode::ArraySize { id, size } => { 
+                return format!("Size_{}_ID{}", size, id);
+            }
+            SemanticNode::HigherLevelNode { id, description } => {
+                return format!("{}_ID{}", description, id);
+            }
+            SemanticNode::Marker { id } => {
+                return format!("Marker_ID{}", id);
+            }
         }
     }
+
+    pub fn new_identifier(all_semantic_nodes: &Vec<SemanticNode>, symbol: String) -> SemanticNode {
+        SemanticNode::Identifier { id: all_semantic_nodes.len(), symbol: symbol }
+    }
+
+    pub fn new_type(all_semantic_nodes: &Vec<SemanticNode>, type_string: String) -> SemanticNode {
+        SemanticNode::Type { id: all_semantic_nodes.len(), type_string: type_string }
+    }
+
+    pub fn new_array_size(all_semantic_nodes: &Vec<SemanticNode>, size: usize) -> SemanticNode {
+        SemanticNode::ArraySize { id: all_semantic_nodes.len(), size: size }     
+    }
+
+    pub fn new_higher_level_node(all_semantic_nodes: &Vec<SemanticNode>, description: String) -> SemanticNode {
+        SemanticNode::HigherLevelNode { id: all_semantic_nodes.len(), description: description } 
+    }
+
+    pub fn new_marker_node(all_semantic_nodes: &Vec<SemanticNode>) -> SemanticNode {
+        SemanticNode::Marker { id: all_semantic_nodes.len() }     
+    }
+
+    pub fn is_marker(&self) -> bool {
+        matches!(self, SemanticNode::Marker { id })
+    }
 }
+
 
 pub trait SemanticAction {
     fn take_action(
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
     );
 }
 
@@ -36,69 +76,104 @@ impl SemanticAction for CheckStackOneNode {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert_eq!(semantic_stack.len(), 1);
         let root_node = semantic_stack.pop()
             .expect("Should be able to get the last remaining node.");
-        edges.push(("START".to_string(), root_node.as_string()));
+        let start_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "START".to_string());
+        edges.push((start_node, root_node));
     }
 }
 
-pub struct StoreValue {
-    pub value: String,
-}
-
-pub fn push_node_with_name(
-    node_value: String,
+fn push_new_node(
+    new_node: SemanticNode,
     semantic_stack: &mut Vec<SemanticNode>,
     all_semantic_nodes: &mut Vec<SemanticNode>,
 ) {
-    let new_node = SemanticNode {
-        id: all_semantic_nodes.len(),
-        val: node_value.clone(),
-    };
     semantic_stack.push(
         new_node.clone()
     );
     all_semantic_nodes.push(
         new_node.clone()
-    )
-}
-
-
-pub fn push_node(
-    node: SemanticNode,
-    semantic_stack: &mut Vec<SemanticNode>,
-    all_semantic_nodes: &mut Vec<SemanticNode>,
-) {
-    semantic_stack.push(
-        node.clone()
     );
-    all_semantic_nodes.push(
-        node.clone()
-    )
 }
 
+pub struct PushHigherLevelNode {
+    pub description: String,
+}
 
-
-impl SemanticAction for StoreValue {
+impl SemanticAction for PushHigherLevelNode {
     fn take_action(
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
-        let new_node = SemanticNode {
-            id: all_semantic_nodes.len(),
-            val: self.value.clone(),
-        };
-        semantic_stack.push(
-            new_node.clone()
-        );
-        all_semantic_nodes.push(
-            new_node.clone()
-        )
+        let new_node = SemanticNode::new_higher_level_node(&all_semantic_nodes, self.description.to_string());
+        push_new_node(new_node, semantic_stack, all_semantic_nodes);
+    }
+}
+
+
+pub struct PushIdentifier;
+
+impl SemanticAction for PushIdentifier {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+    ) {
+        let curr_token = curr_token.expect("Expected an identifier token, but none available");
+        if matches!(curr_token.token_type, TokenType::Identifier) {
+            let new_node = SemanticNode::new_identifier(&all_semantic_nodes, curr_token.lexeme.to_string());
+            push_new_node(new_node, semantic_stack, all_semantic_nodes);
+        } else {
+            panic!("Expected an identifier token but got {:?}", curr_token);
+        }
+    }
+}
+
+
+pub struct PushType {
+    pub type_string: String,
+}
+
+impl SemanticAction for PushType {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+    ) {
+        let new_node = SemanticNode::new_type(&all_semantic_nodes, self.type_string.to_string());
+        push_new_node(new_node, semantic_stack, all_semantic_nodes);
+    }
+}
+
+
+pub struct PushArraySize {
+    pub size: usize,
+}
+
+impl SemanticAction for PushArraySize {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
+    ) {
+        let new_node = SemanticNode::new_array_size(&all_semantic_nodes, self.size);
+        push_new_node(new_node, semantic_stack, all_semantic_nodes);
     }
 }
 
@@ -109,21 +184,31 @@ impl SemanticAction for PlusGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 3,
                 "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
-        let symbol = semantic_stack.get(semantic_stack.len() - 2).unwrap().val.clone();
+        let symbol_semanctic_node = semantic_stack.get(semantic_stack.len() - 2).unwrap();
+        let symbol = match symbol_semanctic_node { 
+            SemanticNode::HigherLevelNode { id, description } => {
+                description
+            }
+            _ => {
+                panic!("operation symbol should be a higher level node {:?}", symbol_semanctic_node);
+            }
+        };
         assert!(
-            (&symbol == "Or") || (&symbol == "Minus") || (&symbol == "Plus"),
+            (symbol == "Or") || (symbol == "Minus") || (symbol == "Plus"),
             "The second element needs to be mult,and,or div. stack {:?}", semantic_stack
         );
         let operand1 = semantic_stack.pop().unwrap();
         let operator = semantic_stack.pop().unwrap();
         let operand2 = semantic_stack.pop().unwrap();
-        edges.push((operator.as_string(), operand1.as_string()));
-        edges.push((operator.as_string(), operand2.as_string()));
-        semantic_stack.push(operator);
+        edges.push((operator.clone(), operand1.clone()));
+        edges.push((operator.clone(), operand2.clone()));
+        push_new_node(operator, semantic_stack, all_semantic_nodes)
     }
 }
 
@@ -135,18 +220,20 @@ impl SemanticAction for LocalVarGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 3,
                 "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
         let array_list_node = semantic_stack.pop().unwrap();
         let type_node = semantic_stack.pop().unwrap();
         let id_node = semantic_stack.pop().unwrap();
-        let local_var_node = SemanticNode::new(all_semantic_nodes, "LocalVarDecl".into());
-        edges.push((local_var_node.as_string(), id_node.as_string()));
-        edges.push((local_var_node.as_string(), type_node.as_string()));
-        edges.push((local_var_node.as_string(), array_list_node.as_string()));
-        semantic_stack.push(local_var_node);
+        let local_var_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "LocalVarDecl".into());
+        edges.push((local_var_node.clone(), id_node.clone()));
+        edges.push((local_var_node.clone(), type_node.clone()));
+        edges.push((local_var_node.clone(), array_list_node.clone()));
+        push_new_node(local_var_node, semantic_stack, all_semantic_nodes);
     }
 }
 
@@ -158,16 +245,18 @@ impl SemanticAction for FunctionGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 2,
                 "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
         let local_var_decl_list_node = semantic_stack.pop().unwrap();
         let id_node = semantic_stack.pop().unwrap();
-        let function_node = SemanticNode::new(all_semantic_nodes, "Function".into());
-        edges.push((function_node.as_string(), id_node.as_string()));
-        edges.push((function_node.as_string(), local_var_decl_list_node.as_string()));
-        semantic_stack.push(function_node);
+        let function_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "Function".into());
+        edges.push((function_node.clone(), id_node.clone()));
+        edges.push((function_node.clone(), local_var_decl_list_node.clone()));
+        push_new_node(function_node, semantic_stack, all_semantic_nodes)
     }
 }
 
@@ -179,21 +268,49 @@ impl SemanticAction for FunctionGatherFull {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 3,
                 "The semantic stack doesn't have enough nodes Stack {:?}", semantic_stack);
         let assign_statement_list_node = semantic_stack.pop().unwrap();
         let local_var_decl_list_node = semantic_stack.pop().unwrap();
         let id_node = semantic_stack.pop().unwrap();
-        let function_node = SemanticNode::new(all_semantic_nodes, "Function".into());
-        edges.push((function_node.as_string(), id_node.as_string()));
-        edges.push((function_node.as_string(), local_var_decl_list_node.as_string()));
-        edges.push((function_node.as_string(), assign_statement_list_node.as_string()));
-        semantic_stack.push(function_node);
+        let function_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "Function".into());
+        edges.push((function_node.clone(), id_node.clone()));
+        edges.push((function_node.clone(), local_var_decl_list_node.clone()));
+        edges.push((function_node.clone(), assign_statement_list_node.clone()));
+        push_new_node(function_node, semantic_stack, all_semantic_nodes)
     }
 }
 
+pub struct Gather {
+    gather_type: String,
+    num_nodes_to_gather: usize
+}
+
+impl SemanticAction for Gather {
+    fn take_action(
+        &self,
+        semantic_stack: &mut Vec<SemanticNode>,
+        all_semantic_nodes: &mut Vec<SemanticNode>,
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
+    ) {
+        let semantic_stack_initial_size = semantic_stack.len();
+        assert!(semantic_stack.len() >= self.num_nodes_to_gather,
+                "The semantic stack doesn't have enough nodes for gather {:?} Stack {:?}", self.gather_type.as_str(), semantic_stack);
+        let new_node = SemanticNode::new_higher_level_node(all_semantic_nodes, self.gather_type.to_string());
+        for _ in 0..self.num_nodes_to_gather {
+            let node_to_collect = semantic_stack.pop().unwrap();
+            edges.push((new_node.clone(), node_to_collect.clone()));
+        }    
+        assert_eq!(semantic_stack.len(), semantic_stack_initial_size - self.num_nodes_to_gather);
+        push_new_node(new_node, semantic_stack, all_semantic_nodes);
+    }
+}
 
 pub struct ProgramGather;
 
@@ -202,14 +319,15 @@ impl SemanticAction for ProgramGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
     ) {
         assert!(semantic_stack.len() >= 1,
                 "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
         let function_list_node = semantic_stack.pop().unwrap();
-        let program_node = SemanticNode::new(all_semantic_nodes, "Program".into());
-        edges.push((program_node.as_string(), function_list_node.as_string()));
-        semantic_stack.push(program_node);
+        let program_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "Program".into());
+        edges.push((program_node.clone(), function_list_node.clone()));
+        push_new_node(program_node, semantic_stack, all_semantic_nodes);
     }
 }
 
@@ -221,16 +339,18 @@ impl SemanticAction for AssignStatementGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 2,
                 "The semantic stack doesn't have enough elements. Stack {:?}", semantic_stack);
         let righthand_side = semantic_stack.pop().unwrap();
         let left_hand_side = semantic_stack.pop().unwrap();
-        let assign_statement_node = SemanticNode::new(all_semantic_nodes, "AssignStatement".into());
-        edges.push((assign_statement_node.as_string(), left_hand_side.as_string()));
-        edges.push((assign_statement_node.as_string(), righthand_side.as_string()));
-        semantic_stack.push(assign_statement_node);
+        let assign_statement_node = SemanticNode::new_higher_level_node(all_semantic_nodes, "AssignStatement".into());
+        edges.push((assign_statement_node.clone(), left_hand_side.clone()));
+        edges.push((assign_statement_node.clone(), righthand_side.clone()));
+        push_new_node(assign_statement_node, semantic_stack, all_semantic_nodes)
     }
 }
 
@@ -242,20 +362,30 @@ impl SemanticAction for MultGather {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
         assert!(semantic_stack.len() >= 3,
                 "The semantic stack should have the operands and plus. Stack {:?}", semantic_stack);
-        let symbol = semantic_stack.get(semantic_stack.len() - 2).unwrap().val.clone();
+        let symbol_semanctic_node = semantic_stack.get(semantic_stack.len() - 2).unwrap();
+        let symbol = match symbol_semanctic_node { 
+            SemanticNode::HigherLevelNode { id, description } => {
+                description
+            }
+            _ => {
+                panic!("operation symbol should be a higher level node {:?}", symbol_semanctic_node);
+            }
+        };
         assert!(
-            (&symbol == "And") || (&symbol == "Div") || (&symbol == "Mult"),
+            (symbol == "And") || (symbol == "Div") || (symbol == "Mult"),
             "The second element needs to be mult,and,or div. stack {:?}", semantic_stack
         );
         let operand1 = semantic_stack.pop().unwrap();
         let operator = semantic_stack.pop().unwrap();
         let operand2 = semantic_stack.pop().unwrap();
-        edges.push((operator.as_string(), operand1.as_string()));
-        edges.push((operator.as_string(), operand2.as_string()));
+        edges.push((operator.clone(), operand1.clone()));
+        edges.push((operator.clone(), operand2.clone()));
         semantic_stack.push(operator);
     }
 }
@@ -267,9 +397,12 @@ impl SemanticAction for MarkListBegin {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
-        push_node_with_name("[ListBegin]".into(), semantic_stack, all_semantic_nodes)
+        let new_marker_node = SemanticNode::new_marker_node(all_semantic_nodes);
+        push_new_node(new_marker_node, semantic_stack, all_semantic_nodes);
     }
 }
 
@@ -282,23 +415,26 @@ impl SemanticAction for CollectList {
         &self,
         semantic_stack: &mut Vec<SemanticNode>,
         all_semantic_nodes: &mut Vec<SemanticNode>,
-        edges: &mut Vec<Edge>
+        edges: &mut Vec<(SemanticNode, SemanticNode)>,
+        curr_token: Option<&Token>
+
     ) {
-        let begin_list_node = semantic_stack.iter().find(|&node| node.val == "[ListBegin]");
+        let begin_list_node = semantic_stack.iter().find(|&node| node.is_marker());
         assert!(begin_list_node.is_some(), "To collect a list, a start marker should exist, but it doesn't in stack {:?}", semantic_stack);
         let mut collected_elements: Vec<SemanticNode> = vec![];
-        while semantic_stack.last().unwrap().val != "[ListBegin]" {
+        while !semantic_stack.last().unwrap().is_marker() {
             // store the values
             collected_elements.push(semantic_stack.pop().unwrap())
         }
-        assert_eq!(semantic_stack.pop().unwrap().val, "[ListBegin]");
-        let list_node = SemanticNode::new(all_semantic_nodes,
-                                          format!("{}List", self.list_name)
-                                          );
+        assert!(semantic_stack.pop().unwrap().is_marker());
+        let list_node = SemanticNode::new_higher_level_node(
+            all_semantic_nodes,
+            format!("{}", self.list_name)
+        );
         for collected_item in collected_elements {
-            edges.push((list_node.as_string(), collected_item.as_string()))
+            edges.push((list_node.clone(), collected_item.clone()))
         }
-        push_node(list_node, semantic_stack, all_semantic_nodes);
+        push_new_node(list_node, semantic_stack, all_semantic_nodes);
     }
 }
 
@@ -350,49 +486,49 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
         }
         "ADDOP → or" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Or".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Or".to_string()})),
                 SyntaxElement("or".into()),
             ]
         }
         "ADDOP → minus" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Minus".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Minus".to_string()})),
                 SyntaxElement("minus".into()),
             ]
         }
         "ADDOP → plus" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Plus".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Plus".to_string()})),
                 SyntaxElement("plus".into()),
             ]
         }
         "MULTOP → and" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "And".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "And".to_string()})),
                 SyntaxElement("and".into()),
             ]
         }
         "MULTOP → div" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Div".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Div".to_string()})),
                 SyntaxElement("div".into()),
             ]
         }
         "MULTOP → mult" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Mult".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Mult".to_string()})),
                 SyntaxElement("mult".into()),
             ]
         }
         "LITERAL → floatlit" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Float".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Float".to_string()})),
                 SyntaxElement("floatlit".into()),
             ]
         }
         "LITERAL → intlit" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "Int".to_string()})),
+                SemanticElement(Box::new(PushHigherLevelNode{description: "Int".to_string()})),
                 SyntaxElement("intlit".into()),
             ]
         }
@@ -411,22 +547,20 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
         //
         // Local Var Declaration
         //
-        //
-        "TYPE → id" => {
+        "TYPE → IDENTIFIER" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "IdType".to_string()})),
-                SyntaxElement("id".into()),
+                SyntaxElement("IDENTIFIER".into()),
             ]
         }
         "TYPE → float" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "FloatType".to_string()})),
+                SemanticElement(Box::new(PushType{type_string: "float".to_string()})),
                 SyntaxElement("float".into()),
             ]
         }
         "TYPE → integer" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "IntType".to_string()})),
+                SemanticElement(Box::new(PushType{type_string: "int".to_string()})),
                 SyntaxElement("integer".into()),
             ]
         }
@@ -437,11 +571,10 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
                 SemanticElement(Box::new(CheckStackOneNode)),
             ];
         }
-        "LOCALVARDECL → localvar id colon TYPE ARRAYLIST semi" => {
+        "LOCALVARDECL → localvar IDENTIFIER colon TYPE ARRAYLIST semi" => {
             return vec![
                 SyntaxElement("localvar".to_string()),
-                SyntaxElement("id".to_string()),
-                SemanticElement(Box::new(StoreValue{value: "Identifier".to_string()})),
+                SyntaxElement("IDENTIFIER".to_string()),
                 SyntaxElement("colon".to_string()),
                 SyntaxElement("TYPE".to_string()),
                 SemanticElement(Box::new(MarkListBegin)),
@@ -453,13 +586,13 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
         }
         "ARRAYSIZPOSTFIX → rsqbr" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "EmptySize".to_string()})),
+                SemanticElement(Box::new(PushArraySize{size: 0})),
                 SyntaxElement("rsqbr".into()),
             ]
         }
         "ARRAYSIZPOSTFIX → intlit rsqbr" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "IntSize".to_string()})),
+                SemanticElement(Box::new(PushArraySize{size: 0})),
                 SyntaxElement("intlit".into()),
                 SyntaxElement("rsqbr".into()),
             ]
@@ -473,21 +606,6 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
         "ARRAYSIZE → lsqbr ARRAYSIZPOSTFIX" => {
             return get_only_syntax_elements(production_string)
         },
-        "FUNCDEF → function id lpar rpar lcurbr LISTLOCALVARDECL rcurbr" => {
-            return vec![
-                SyntaxElement("function".into()),
-                SyntaxElement("id".into()),
-                SemanticElement(Box::new(StoreValue{value: "Identifier".to_string()})),
-                SyntaxElement("lpar".to_string()),
-                SyntaxElement("rpar".to_string()),
-                SyntaxElement("lcurbr".to_string()),
-                SemanticElement(Box::new(MarkListBegin)),
-                SyntaxElement("LISTLOCALVARDECL".to_string()),
-                SemanticElement(Box::new(CollectList{list_name: "LocalVarDeclList".into()})),
-                SyntaxElement("rcurbr".to_string()),
-                SemanticElement(Box::new(FunctionGather))
-            ];
-        }
         "START → FUNCDEF eof" => {
             return vec![
                 SyntaxElement("FUNCDEF".to_string()),
@@ -528,11 +646,24 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
         "LISTASSIGNSTATEMENTS → &epsilon" =>  {
             return get_only_syntax_elements(production_string)
         }
-        "FUNCDEF → function id lpar rpar lcurbr LISTLOCALVARDECL LISTASSIGNSTATEMENTS rcurbr" => {
+        "FUNCDEF → function IDENTIFIER lpar rpar lcurbr LISTLOCALVARDECL rcurbr" => {
             return vec![
                 SyntaxElement("function".into()),
-                SyntaxElement("id".into()),
-                SemanticElement(Box::new(StoreValue{value: "Identifier".to_string()})),
+                SyntaxElement("IDENTIFIER".into()),
+                SyntaxElement("lpar".to_string()),
+                SyntaxElement("rpar".to_string()),
+                SyntaxElement("lcurbr".to_string()),
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTLOCALVARDECL".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "LocalVarDeclList".into()})),
+                SyntaxElement("rcurbr".to_string()),
+                SemanticElement(Box::new(FunctionGather))
+            ];
+        }
+        "FUNCDEF → function IDENTIFIER lpar rpar lcurbr LISTLOCALVARDECL LISTASSIGNSTATEMENTS rcurbr" => {
+            return vec![
+                SyntaxElement("function".into()),
+                SyntaxElement("IDENTIFIER".into()),
                 SyntaxElement("lpar".to_string()),
                 SyntaxElement("rpar".to_string()),
                 SyntaxElement("lcurbr".to_string()),
@@ -549,24 +680,82 @@ pub fn get_production_elements(production_string: &String) -> Vec<ProductionElem
                 SemanticElement(Box::new(FunctionGatherFull))
             ];
         }
-        "ASSIGNSTAT → id equal ASSIGNEDVALUE semi" => {
+        "FUNCDEF → function IDENTIFIER lpar FPARAMS rpar lcurbr LISTLOCALVARDECL LISTASSIGNSTATEMENTS rcurbr" => {
             return vec![
-                SyntaxElement("id".into()),
-                SemanticElement(Box::new(StoreValue{value: "leftHandIdentifier".to_string()})),
+                SemanticElement(Box::new(MarkListBegin)),
+
+                SyntaxElement("function".into()),
+                SyntaxElement("IDENTIFIER".into()),
+
+                SyntaxElement("lpar".to_string()),
+
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("FPARAMS".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "FuncParamsList".into()})),
+
+                SyntaxElement("rpar".to_string()),
+
+                SyntaxElement("lcurbr".to_string()),
+
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTLOCALVARDECL".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "LocalVarDeclList".into()})),
+
+                SemanticElement(Box::new(MarkListBegin)),
+                SyntaxElement("LISTASSIGNSTATEMENTS".to_string()),
+                SemanticElement(Box::new(CollectList{list_name: "AssignStatList".into()})),
+
+                SyntaxElement("rcurbr".to_string()),
+
+                SemanticElement(Box::new(CollectList{list_name: "Function".into()})),
+            ];
+        }
+        "ASSIGNSTAT → IDENTIFIER equal ASSIGNEDVALUE semi" => {
+            return vec![
+                SyntaxElement("IDENTIFIER".into()),
                 SyntaxElement("equal".to_string()),
                 SyntaxElement("ASSIGNEDVALUE".to_string()),
                 SyntaxElement("semi".to_string()),
                 SemanticElement(Box::new(AssignStatementGather))
             ];
         }
-        "ASSIGNEDVALUE → id" => {
+        "ASSIGNEDVALUE → IDENTIFIER" => {
             return vec![
-                SemanticElement(Box::new(StoreValue{value: "RightHandIdentifier".to_string()})),
-                SyntaxElement("id".into()),
+                SyntaxElement("IDENTIFIER".into()),
             ];
         }
         "ASSIGNEDVALUE → ARITHEXPR" =>  {
             return get_only_syntax_elements(production_string)
+        }
+        // Function parameters
+        "FPARAMS → &epsilon" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "FPARAMS → IDENTIFIER colon TYPE ARRAYLIST FPARAMSTAIL" => {
+            return vec![
+                SemanticElement(Box::new(MarkListBegin)),
+
+                SyntaxElement("IDENTIFIER".into()),
+                SyntaxElement("colon".into()),
+                SyntaxElement("TYPE".into()),
+                SyntaxElement("ARRAYLIST".into()),
+
+                SemanticElement(Box::new(CollectList{list_name: "FunctionParam".into()})),
+
+                SyntaxElement("FPARAMSTAIL".into()),
+            ];
+        }
+        "FPARAMSTAIL → &epsilon" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "FPARAMSTAIL → comma FPARAMS" => {
+            return get_only_syntax_elements(production_string)
+        }
+        "IDENTIFIER → id" => {
+            return vec![
+                SemanticElement(Box::new(PushIdentifier)),
+                SyntaxElement("id".into()),
+            ];
         }
         _ => panic!("Can't add semantics to ({}) at the moment", production_string.as_str())
     };

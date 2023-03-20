@@ -70,52 +70,46 @@ fn test_read_table_dict() {
 fn test_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/test.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
+    let mut all_tokens = scanner.get_all_tokens();
     let table_dict = get_table_dict("src/grammars/full_table.json");
     let output_file = File::create("src/syntax_tests/out/test.derivation").expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/arith.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/arith.dot")
 }
 
 #[test]
 fn test_arith_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/arith.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
+    let mut all_tokens = scanner.get_all_tokens();
     let table_dict = get_table_dict("src/grammars/arith_table.json");
     let output_file = File::create("src/syntax_tests/out/arith.derivation").expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/arith.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/arith.dot")
 }
 
 
 #[test]
+#[ignore]
 fn test_localvar_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/localvardecl.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
+    let mut all_tokens = scanner.get_all_tokens();
     let table_dict = get_table_dict("src/grammars/localvardecl_table.json");
     let output_file = File::create("src/syntax_tests/out/localvardecl.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/localvardecl.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/localvardecl.dot")
 }
 
 
 #[test]
+#[ignore]
 fn test_localvar_parse_harder() {
     let source_file_content = read_source_file("src/syntax_tests/src/localvardecl2.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
+    let mut all_tokens = scanner.get_all_tokens();
     let table_dict = get_table_dict("src/grammars/localvardecl_table.json");
     let output_file = File::create("src/syntax_tests/out/localvardecl2.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/localvardecl2.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/localvardecl2.dot")
 }
 
 
@@ -123,13 +117,11 @@ fn test_localvar_parse_harder() {
 fn test_simple_function_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/simple_function.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
-    let table_dict = get_table_dict("src/grammars/function_simple.json");
+    let mut all_tokens = scanner.get_all_tokens();
+    let table_dict = get_table_dict("src/grammars/base.json");
     let output_file = File::create("src/syntax_tests/out/function_simple.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/function_simple.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/function_simple.dot")
 }
 
 
@@ -137,13 +129,11 @@ fn test_simple_function_parse() {
 fn test_simple_program_parse() {
     let source_file_content = read_source_file("src/syntax_tests/src/simple_program.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
-    let table_dict = get_table_dict("src/grammars/simple_program.json");
+    let mut all_tokens = scanner.get_all_tokens();
+    let table_dict = get_table_dict("src/grammars/base.json");
     let output_file = File::create("src/syntax_tests/out/simple_program.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/simple_program.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/simple_program.dot")
 }
 
 
@@ -151,13 +141,23 @@ fn test_simple_program_parse() {
 fn test_assignment_program() {
     let source_file_content = read_source_file("src/syntax_tests/src/assignment_program.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
-    let table_dict = get_table_dict("src/grammars/program_with_assignments.json");
+    let mut all_tokens = scanner.get_all_tokens();
+    let table_dict = get_table_dict("src/grammars/base.json");
     let output_file = File::create("src/syntax_tests/out/program_with_assignments.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/program_with_assignments.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/program_with_assignments.dot")
+}
+
+
+#[test]
+fn test_base_program() {
+    let source_file_content = read_source_file("src/syntax_tests/src/base.src".to_string());
+    let mut scanner = Scanner::from(source_file_content);
+    let mut all_tokens = scanner.get_all_tokens();
+    let table_dict = get_table_dict("src/grammars/base.json");
+    let output_file = File::create("src/syntax_tests/out/base.derivation")
+        .expect("Should have been able to create the file");
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/base.dot")
 }
 
 
@@ -165,13 +165,11 @@ fn test_assignment_program() {
 fn test_custom() {
     let source_file_content = read_source_file("src/syntax_tests/src/custom_test.src".to_string());
     let mut scanner = Scanner::from(source_file_content);
-    let all_tokens = scanner.get_all_tokens();
-    let mut calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
-    let table_dict = get_table_dict("src/grammars/program_with_assignments.json");
+    let mut all_tokens = scanner.get_all_tokens();
+    let table_dict = get_table_dict("src/grammars/base.json");
     let output_file = File::create("src/syntax_tests/out/custom_test.derivation")
         .expect("Should have been able to create the file");
-    parse(&table_dict, &mut calgary_tokens, &output_file, "src/test_out/custom_test.dot")
+    parse(&table_dict, &mut all_tokens, &output_file, "src/test_out/custom_test.dot")
 }
 
 #[test]
@@ -243,7 +241,7 @@ pub fn test_convert_token_to_calgary() {
     ];
     let truth: Vec<String> = truth.into_iter().map(|s| s.to_string()).collect();
     let calgary_tokens: Vec<String> = all_tokens.into_iter()
-        .map(|token| get_calgary_token(token.token_type)).collect();
+        .map(|token| token.to_calgary()).collect();
     assert_eq!(calgary_tokens.len(), 7);
     assert_eq!(truth, calgary_tokens);
 }

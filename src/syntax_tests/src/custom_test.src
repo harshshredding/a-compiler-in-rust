@@ -1,4 +1,5 @@
 function something() {
+  localvar n    : integer;
   x = 3;
   y = 4;
   z = 10;
@@ -6,4 +7,6 @@ function something() {
 
 function something2() {
   localvar n    : integer;
+  z = 2*3*4 + 5*2 + 5*4;
 }
+

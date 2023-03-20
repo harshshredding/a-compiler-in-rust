@@ -16,7 +16,7 @@ impl<'a> dot::Labeller<'a, Nd, Edge> for Edges {
     fn graph_id(&'a self) -> dot::Id<'a> { dot::Id::new("example1").unwrap() }
 
     fn node_id(&'a self, n: &Nd) -> dot::Id<'a> {
-        dot::Id::new(format!("{}", n)).unwrap()
+        dot::Id::new(format!("{}", n)).expect(&format!("could not create id for {} end", n))
     }
 }
 
