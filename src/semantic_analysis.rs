@@ -3,7 +3,7 @@ use crate::lexical_analysis::TokenType;
 use crate::semantic_analysis::ProductionElement::{SemanticElement, SyntaxElement};
 use super::semantic_graph::Edge;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum SemanticNode {
     Identifier{id: usize, symbol: String},
     Type{id: usize, type_string: String},

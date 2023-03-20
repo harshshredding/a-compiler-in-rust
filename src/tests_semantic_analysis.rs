@@ -1,3 +1,7 @@
+use std::collections::HashMap;
+use std::hash::Hash;
+use std::vec;
+
 use crate::semantic_graph::Edge;
 use super::semantic_analysis::*;
 use crate::lexical_analysis::Token;
@@ -74,4 +78,9 @@ fn test_semanctic_node() {
 #[test]
 pub fn test_create_adjacency_matrix() {
     let edges: Vec<(SemanticNode, SemanticNode)> = vec![];
+    let mut adjacency_matrix: HashMap<SemanticNode, Vec<SemanticNode>> = HashMap::new();
+    let mut all_semantic_nodes: Vec<SemanticNode> = vec![];
+    let node1 = SemanticNode::new_higher_level_node(&mut all_semantic_nodes, "node1".to_string());
+    adjacency_matrix.insert(node1, vec![]);
+    assert_eq!(adjacency_matrix.len(), 1);
 }
